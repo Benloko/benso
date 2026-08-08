@@ -116,38 +116,65 @@ body {
 
 .anim-zoom, .anim-kinetic {
   animation: kineticFast 4s ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-glow, .anim-neon {
   animation: neonFlashFast 3s ease-in-out infinite;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-shimmer, .anim-gold {
   animation: shimmerGoldFast 3.5s ease-in-out infinite;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-float, .anim-3d {
   animation: float3DFast 3.8s ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-rotate, .anim-rotation {
   animation: rotateFullFast 6s linear infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-bounce, .anim-rebond {
   animation: bounceSpringFast 2.8s ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-pulse, .anim-battement {
   animation: heartbeatPulseFast 2.2s ease-in-out infinite;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-vortex {
   animation: vortexSwirlFast 4s ease-in-out infinite;
+  will-change: transform, filter;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 .anim-wave, .anim-vague {
   animation: liquidWaveFast 3.2s ease-in-out infinite;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 
 

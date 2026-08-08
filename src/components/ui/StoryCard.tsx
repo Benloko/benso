@@ -65,6 +65,19 @@ export const StoryCard: React.FC<StoryCardProps> = ({
   const [likes, setLikes] = useState(story.likesCount);
   const [bookmarked, setBookmarked] = useState(story.isBookmarked || false);
 
+  // Fallback image handling to prevent broken alt text floating over blank cards
+  const [imgSrc, setImgSrc] = useState<string>(
+    story.coverImage || 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80'
+  );
+  const [hasImgError, setHasImgError] = useState<boolean>(false);
+
+  const handleImgError = () => {
+    if (!hasImgError) {
+      setHasImgError(true);
+      setImgSrc('https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=800&q=80');
+    }
+  };
+
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     const newLiked = !liked;
@@ -149,12 +162,13 @@ export const StoryCard: React.FC<StoryCardProps> = ({
       </div>
 
       {/* Cover Image & Media Section - High Visual Impact Artwork */}
-      <div className="relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[2/1] bg-indigo-950/60 z-10 shadow-md">
+      <div className="relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[2/1] bg-[#161133] z-10 shadow-md isolate transform-gpu shrink-0">
         <img
-          src={story.coverImage}
-          alt={story.title}
+          src={imgSrc}
+          alt=""
+          onError={handleImgError}
           className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ${
-            story.coverEffect ? `anim-${story.coverEffect}` : ''
+            story.coverEffect && story.coverEffect !== 'none' ? `anim-${story.coverEffect}` : ''
           }`}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#130F26]/95 via-transparent to-black/20" />
@@ -177,7 +191,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
       </div>
 
       {/* Title & Description with Refined Typography */}
-      <div className="z-10 flex flex-col gap-1.5">
+      <div className="z-10 flex flex-col gap-1.5 shrink-0">
         <h3 className="text-base sm:text-lg font-black text-gray-100 group-hover:text-indigo-300 transition-colors leading-snug tracking-tight">
           {story.title}
         </h3>

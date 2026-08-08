@@ -206,7 +206,7 @@ export const CreateStoryModal: React.FC<CreateStoryModalProps> = ({
         }
       }
 
-      const fallbackCover = finalCoverUrl || (
+      const fallbackCover = (finalCoverUrl && !finalCoverUrl.startsWith('blob:')) ? finalCoverUrl : (
         selectedFormat.id === 'lyrique' ? '/category_lyrique.png' :
         selectedFormat.id === 'image' ? '/category_image.png' :
         selectedFormat.id === 'video' ? '/category_video.png' : '/category_audio.png'
