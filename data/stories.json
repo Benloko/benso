@@ -1,0 +1,76 @@
+[
+  {
+    "id": "story-1",
+    "title": "L'Ombre du Baobab",
+    "author": {
+      "name": "Amina Kouyaté",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true,
+      "handle": "amina_k"
+    },
+    "coverImage": "https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?auto=format&fit=crop&w=1200&q=80",
+    "coverEffect": "zoom",
+    "category": "Conte & Légende",
+    "format": "lyrique",
+    "isPremium": true,
+    "priceFCFA": 500,
+    "excerpt": "Sous le grand baobab centenaire du village, un secret enfoui depuis des générations s'apprête à être révélé...",
+    "fullContent": "Sous le grand baobab centenaire du village de Kandi, les anciens se réunissaient chaque soir au coucher du soleil. Mais ce soir-là, une étrange lumière dorée s'échappait des racines sacrées. Amina, jeune herboriste et gardienne des coutumes, s'approcha prudemment...",
+    "likesCount": 143,
+    "commentsCount": 42,
+    "sharesCount": 15,
+    "readsCount": 1250,
+    "isLiked": true,
+    "isBookmarked": false,
+    "createdAt": "2026-08-05T22:30:32.734Z"
+  },
+  {
+    "id": "story-2",
+    "title": "Les Rois de la Rue",
+    "author": {
+      "name": "Kofi Mensah",
+      "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true,
+      "handle": "kofimensah"
+    },
+    "coverImage": "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=1200&q=80",
+    "coverEffect": "glow",
+    "category": "Manga & BD",
+    "format": "image",
+    "isPremium": false,
+    "excerpt": "Dans les rues animées de Cotonou, deux amis d'enfance rêvent de transformer leur passion pour la musique en empire...",
+    "fullContent": "Cotonou, 08h00 du matin. Le marché Dantokpa s'éveille dans une symphonie de couleurs et de bruits. Yao et Bakari branchent leurs enceintes de fortune...",
+    "likesCount": 89,
+    "commentsCount": 14,
+    "sharesCount": 5,
+    "readsCount": 840,
+    "isLiked": true,
+    "isBookmarked": false,
+    "createdAt": "2026-08-05T19:30:32.734Z"
+  },
+  {
+    "id": "story-3",
+    "title": "Le Souffle des Ancêtres",
+    "author": {
+      "name": "Fatou Sow",
+      "avatar": "https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?auto=format&fit=crop&w=150&q=80",
+      "isVerified": false,
+      "handle": "fatousow"
+    },
+    "coverImage": "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=1200&q=80",
+    "coverEffect": "vortex",
+    "category": "Slam & Poésie",
+    "format": "audio",
+    "isPremium": true,
+    "priceFCFA": 300,
+    "excerpt": "Un poème engagé vibrant sur le rythme des kora et des djembe, résonnant au cœur des traditions modernes...",
+    "fullContent": "Écoute le vent murmurer dans les platanes, écoute la voix des anciens qui chantent dans nos cœurs...",
+    "likesCount": 230,
+    "commentsCount": 52,
+    "sharesCount": 29,
+    "readsCount": 2100,
+    "isLiked": false,
+    "isBookmarked": true,
+    "createdAt": "2026-08-05T00:30:32.734Z"
+  }
+]

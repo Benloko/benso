@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>BenSo - Application Sociale de Storytelling</title>
+  <meta name="description" content="Application sociale de storytelling pour l'Afrique francophone. Partagez, lisez et monétisez vos histoires par Mobile Money." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ==========================================================================
+       BENSO MOBILE-FIRST ELEGANT DESIGN SYSTEM
+       ========================================================================== */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    :root {
+      --app-bg: #090713;
+      --app-surface: #141026;
+      --app-card: #16122D;
+      --app-border: rgba(108, 92, 231, 0.18);
+      --app-violet: #6C5CE7;
+      --app-violet-glow: rgba(108, 92, 231, 0.35);
+      --app-coral: #FF7675;
+      --app-amber: #F1C40F;
+      --app-emerald: #2ECC71;
+      --text-main: #F9FAFB;
+      --text-sub: #9CA3AF;
+    }
+
+    body {
+      background-color: var(--app-bg);
+      color: var(--text-main);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 70px;
+    }
+
+    @media (min-width: 900px) {
+      body { padding-bottom: 0; }
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font-family: inherit; }
+
+    /* ==========================================================================
+       COMPACT & SLEEK HEADER (Slim App Bar)
+       ========================================================================== */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(12, 9, 24, 0.95);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--app-border);
+      padding: 8px 12px;
+    }
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #6C5CE7 0%, #FF7675 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 3px 12px var(--app-violet-glow);
+    }
+    .brand-title {
+      font-size: 18px;
+      font-weight: 900;
+      background: linear-gradient(90deg, #FFFFFF 0%, #FF7675 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-btn-minimal {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: #D1D5DB;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+    .icon-btn-minimal:hover {
+      background: rgba(108, 92, 231, 0.2);
+      border-color: rgba(108, 92, 231, 0.4);
+      color: #FFF;
+    }
+
+    .notif-badge {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      background: linear-gradient(135deg, #FF7675, #E66767);
+      color: #FFF;
+      font-size: 9px;
+      font-weight: 900;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--app-bg);
+      box-shadow: 0 2px 6px rgba(255, 118, 117, 0.4);
+    }
+
+    /* Expandable Search Input */
+    .search-input-box {
+      width: 100%;
+      background: #171333;
+      border: 1px solid var(--app-border);
+      border-radius: 14px;
+      padding: 8px 14px;
+      color: #FFF;
+      font-size: 12px;
+      outline: none;
+      margin-top: 8px;
+    }
+
+    /* ==========================================================================
+       FILTERS BAR & MESSAGING ROW (STICKY BELOW HEADER)
+       ========================================================================== */
+    .filters-bar-wrapper {
+      position: sticky;
+      top: 48px; /* Fixed right below sticky header */
+      z-index: 95;
+      background: rgba(12, 9, 24, 0.96);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--app-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 12px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .filters-chips-left {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .filters-chips-left::-webkit-scrollbar { display: none; }
+
+    .msg-icon-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: rgba(108, 92, 231, 0.15);
+      border: 1px solid rgba(108, 92, 231, 0.35);
+      color: #A29BFE;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+    .msg-icon-btn:hover {
+      background: rgba(108, 92, 231, 0.3);
+      border-color: rgba(108, 92, 231, 0.6);
+      color: #FFF;
+    }
+
+    .msg-dot {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2ECC71;
+      box-shadow: 0 0 6px #2ECC71;
+    }
+
+    .chip {
+      padding: 6px 14px;
+      border-radius: 16px;
+      font-size: 11px;
+      font-weight: 800;
+      background: #141029;
+      color: var(--text-sub);
+      border: 1px solid var(--app-border);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .chip.active, .chip:hover {
+      background: var(--app-violet);
+      color: #FFF;
+      border-color: var(--app-violet);
+    }
+
+    /* ==========================================================================
+       LAYOUT & SIDEBARS
+       ========================================================================== */
+    .app-layout {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 12px;
+    }
+    @media (min-width: 900px) {
+      .app-layout {
+        grid-template-columns: 240px 1fr 280px;
+        padding: 20px 16px;
+      }
+    }
+
+    .left-sidebar {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 60px;
+      height: calc(100vh - 80px);
+    }
+    @media (min-width: 900px) { .left-sidebar { display: flex; } }
+
+    .menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 14px;
+      color: var(--text-sub);
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .menu-item:hover, .menu-item.active {
+      background: rgba(108, 92, 231, 0.18);
+      color: #FFF;
+    }
+
+    .right-sidebar {
+      display: none;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 60px;
+    }
+    @media (min-width: 900px) { .right-sidebar { display: flex; } }
+
+    /* ==========================================================================
+       MOBILE BOTTOM NAV
+       ========================================================================== */
+    .mobile-bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(12, 9, 24, 0.96);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--app-border);
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      height: 56px;
+      padding: 0 4px;
+    }
+    @media (min-width: 900px) { .mobile-bottom-nav { display: none; } }
+
+    .nav-tab {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      color: var(--text-sub);
+      font-size: 10px;
+      font-weight: 700;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+    .nav-tab.active { color: var(--app-violet); }
+
+    .nav-tab-publish {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #FF7675 0%, #E66767 100%);
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      box-shadow: 0 4px 14px rgba(255, 118, 117, 0.45);
+      margin-top: -14px;
+      border: 3px solid var(--app-bg);
+      cursor: pointer;
+    }
+
+    /* ==========================================================================
+       STORY POST CARDS (Taller Cover, Round Avatar, Professional CTA & Footer)
+       ========================================================================== */
+    .main-feed {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-width: 0;
+    }
+
+    .post-card {
+      background: var(--app-surface);
+      border: 1px solid var(--app-border);
+      border-radius: 22px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .post-card:hover {
+      border-color: rgba(108, 92, 231, 0.45);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -8px rgba(108, 92, 231, 0.25);
+    }
+
+    .post-header {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom: 1px solid rgba(108, 92, 231, 0.1);
+    }
+
+    .author-info-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    /* Round Creator Avatar */
+    .user-avatar-round {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      color: #FFF;
+      font-size: 13px;
+      flex-shrink: 0;
+      border: 2px solid rgba(108, 92, 231, 0.4);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+    }
+
+    .author-name {
+      font-size: 13px;
+      font-weight: 800;
+      color: #FFF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .author-sub {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .badge-price-tag {
+      padding: 4px 10px;
+      border-radius: 14px;
+      font-size: 10px;
+      font-weight: 800;
+    }
+    .tag-free { background: rgba(46,204,113,0.15); color: #2ECC71; border: 1px solid rgba(46,204,113,0.3); }
+    .tag-premium { background: rgba(255,118,117,0.18); color: #FF7675; border: 1px solid rgba(255,118,117,0.35); }
+
+    /* Prominent Taller Cover Banner */
+    .post-cover-banner {
+      height: 200px;
+      position: relative;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      overflow: hidden;
+    }
+    .post-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.1) 0%, rgba(9, 7, 19, 0.85) 100%);
+    }
+    .post-cover-title {
+      font-size: 20px;
+      font-weight: 900;
+      color: #FFF;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+      position: relative;
+      z-index: 2;
+      line-height: 1.25;
+    }
+
+    .post-body {
+      padding: 14px 16px;
+      font-size: 13px;
+      color: #D1D5DB;
+      line-height: 1.6;
+    }
+
+    .post-cta-container {
+      padding: 0 16px 12px;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Refined Compact CTA Button */
+    .btn-cta-pro {
+      width: auto;
+      max-width: 90%;
+      padding: 7px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 800;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .btn-violet-cta { background: linear-gradient(135deg, #6C5CE7, #5B4BC4); color: #FFF; box-shadow: 0 4px 15px rgba(108,92,231,0.3); }
+    .btn-coral-cta { background: linear-gradient(135deg, #FF7675, #E66767); color: #FFF; box-shadow: 0 4px 15px rgba(255,118,117,0.3); }
+
+    /* Interaction Bar placed at Bottom of Card */
+    .post-actions-bottom {
+      display: flex;
+      border-top: 1px solid rgba(108, 92, 231, 0.12);
+      padding: 6px 12px;
+      justify-content: space-around;
+      background: rgba(14, 10, 32, 0.5);
+    }
+    .btn-interaction {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      color: var(--text-sub);
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-interaction:hover { background: rgba(255,255,255,0.06); color: #FFF; }
+
+    /* ==========================================================================
+       EXPLORER — 2x2 CATEGORY GRID (Premium Card Design)
+       ========================================================================== */
+    .explore-cat-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .explore-cat-card {
+      border-radius: 22px;
+      overflow: hidden;
+      height: 210px;
+      position: relative;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    .explore-cat-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.7);
+    }
+    .explore-cat-card:active { transform: scale(0.98); }
+
+    .explore-cat-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.25) 0%, rgba(0,0,0,0.55) 100%);
+    }
+
+    /* Handwritten-style label — bottom-left of card */
+    .explore-cat-label {
+      position: absolute;
+      bottom: 14px;
+      left: 14px;
+      z-index: 2;
+      font-family: 'Caveat', cursive;
+      font-size: 22px;
+      font-weight: 700;
+      color: rgba(255, 255, 255, 0.92);
+      letter-spacing: 0.5px;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.8);
+      line-height: 1;
+    }
+
+
+
+    .btn-back-explore {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(108,92,231,0.15);
+      border: 1px solid rgba(108,92,231,0.3);
+      color: #A29BFE;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 800;
+    .btn-back-explore:hover { background: rgba(108,92,231,0.3); color: #FFF; }
+
+    /* High-Speed, High-Impact Cover Animation Effects (Fast & Dynamic "Chap Chap!") */
+    @keyframes kineticFast {
+      0% { transform: scale(1) translate(0px, 0px) rotate(0deg); }
+      25% { transform: scale(1.18) translate(-10px, -6px) rotate(3deg); }
+      50% { transform: scale(1.06) translate(8px, 4px) rotate(-2.5deg); }
+      75% { transform: scale(1.22) translate(-5px, 8px) rotate(2deg); }
+      100% { transform: scale(1) translate(0px, 0px) rotate(0deg); }
+    }
+
+    @keyframes neonFlashFast {
+      0%, 100% { 
+        filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.8)) brightness(1) contrast(1); 
+        transform: scale(1);
+      }
+      25% {
+        filter: drop-shadow(0 0 45px rgba(244, 63, 94, 1)) brightness(1.4) contrast(1.3) saturate(1.8);
+        transform: scale(1.06);
+      }
+      50% { 
+        filter: drop-shadow(0 0 50px rgba(99, 102, 241, 1)) brightness(1.6) contrast(1.4) saturate(2); 
+        transform: scale(1.12);
+      }
+      75% {
+        filter: drop-shadow(0 0 35px rgba(236, 72, 153, 1)) brightness(1.3) contrast(1.2);
+        transform: scale(1.04);
+      }
+    }
+
+    @keyframes shimmerGoldFast {
+      0% { 
+        filter: brightness(1) contrast(1) sepia(0);
+        transform: scale(1) rotate(0deg);
+      }
+      33% { 
+        filter: brightness(1.5) contrast(1.4) sepia(0.5) saturate(2.5) drop-shadow(0 0 25px rgba(245, 158, 11, 0.9));
+        transform: scale(1.1) rotate(1.5deg);
+      }
+      66% { 
+        filter: brightness(1.3) contrast(1.2) sepia(0.2) saturate(1.8) drop-shadow(0 0 15px rgba(251, 191, 36, 0.7));
+        transform: scale(1.05) rotate(-1.5deg);
+      }
+      100% { 
+        filter: brightness(1) contrast(1) sepia(0);
+        transform: scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes float3DFast {
+      0%, 100% { 
+        transform: perspective(500px) rotateY(0deg) rotateX(0deg) translateY(0px) scale(1); 
+      }
+      25% { 
+        transform: perspective(500px) rotateY(14deg) rotateX(-10deg) translateY(-14px) scale(1.14); 
+      }
+      50% {
+        transform: perspective(500px) rotateY(-12deg) rotateX(8deg) translateY(-6px) scale(1.08);
+      }
+      75% {
+        transform: perspective(500px) rotateY(10deg) rotateX(-6deg) translateY(-16px) scale(1.16);
+      }
+    }
+
+    .anim-zoom, .anim-kinetic {
+      animation: kineticFast 4s ease-in-out infinite;
+    }
+
+    .anim-glow, .anim-neon {
+      animation: neonFlashFast 3s ease-in-out infinite;
+    }
+
+    .anim-shimmer, .anim-gold {
+      animation: shimmerGoldFast 3.5s ease-in-out infinite;
+    }
+
+    .anim-float, .anim-3d {
+      animation: float3DFast 3.8s ease-in-out infinite;
+    }
+
+    .anim-rotate, .anim-rotation {
+      animation: rotateFullFast 6s linear infinite;
+    }
+
+    .anim-bounce, .anim-rebond {
+      animation: bounceSpringFast 2.8s ease-in-out infinite;
+    }
+
+    .anim-pulse, .anim-battement {
+      animation: heartbeatPulseFast 2.2s ease-in-out infinite;
+    }
+
+    .anim-vortex {
+      animation: vortexSwirlFast 4s ease-in-out infinite;
+    }
+
+    .anim-wave, .anim-vague {
+      animation: liquidWaveFast 3.2s ease-in-out infinite;
+    }
+
+
+
+
+
+
+    /* ==========================================================================
+       PROFILE PAGE (Full Redesign)
+       ========================================================================== */
+    .profile-view {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin: -12px; /* bleed to edges */
+    }
+
+    .profile-cover-banner {
+      height: 130px;
+      background: linear-gradient(135deg, #1A0533 0%, #4A1942 40%, #6C5CE7 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .profile-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 40%, rgba(9,7,19,0.8) 100%);
+    }
+
+    .profile-identity-block {
+      background: var(--app-surface);
+      padding: 0 16px 16px;
+      border-bottom: 1px solid var(--app-border);
+    }
+
+    .profile-avatar-wrap {
+      position: relative;
+      width: 72px;
+      margin-top: -36px;
+      margin-bottom: 10px;
+    }
+    .profile-avatar-big {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #134E5E, #71B280);
+      border: 3px solid var(--app-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      font-weight: 900;
+      color: #FFF;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+    }
+    .profile-verified-badge {
+      position: absolute;
+      bottom: 2px;
+      right: -4px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #6C5CE7;
+      border: 2px solid var(--app-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 900;
+      color: #FFF;
+    }
+
+    .profile-name {
+      font-size: 20px;
+      font-weight: 900;
+      color: #FFF;
+      margin-bottom: 2px;
+    }
+    .profile-handle {
+      font-size: 12px;
+      color: #A29BFE;
+      margin-bottom: 6px;
+    }
+    .profile-handle span { color: var(--text-sub); }
+    .profile-bio {
+      font-size: 12px;
+      color: #D1D5DB;
+      line-height: 1.55;
+      margin-bottom: 4px;
+    }
+    .profile-location {
+      font-size: 11px;
+      color: var(--text-sub);
+    }
+
+    .profile-stats-row {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      background: rgba(108,92,231,0.08);
+      border: 1px solid rgba(108,92,231,0.18);
+      border-radius: 14px;
+      padding: 10px 0;
+      margin-top: 14px;
+    }
+    .profile-stat-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+    .stat-val {
+      font-size: 16px;
+      font-weight: 900;
+      color: #FFF;
+    }
+    .stat-label {
+      font-size: 10px;
+      color: var(--text-sub);
+      font-weight: 600;
+    }
+    .profile-stat-divider {
+      width: 1px;
+      height: 28px;
+      background: rgba(108,92,231,0.25);
+    }
+
+    .profile-earnings-card {
+      background: var(--app-surface);
+      border-top: 1px solid var(--app-border);
+      border-bottom: 1px solid var(--app-border);
+      padding: 16px;
+    }
+    .earnings-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #FFF;
+      margin-bottom: 12px;
+    }
+    .earnings-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: #0D0B20;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    .earnings-item { display: flex; flex-direction: column; gap: 3px; }
+    .earnings-val {
+      font-size: 15px;
+      font-weight: 900;
+    }
+    .earnings-val.green { color: #2ECC71; }
+    .earnings-val.yellow { color: #F1C40F; }
+    .earnings-val.violet { color: #A29BFE; }
+    .earnings-sub {
+      font-size: 10px;
+      color: var(--text-sub);
+    }
+    .btn-withdraw {
+      width: 100%;
+      padding: 12px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #FF7675, #E66767);
+      color: white;
+      border: none;
+      font-size: 13px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(255,118,117,0.3);
+      transition: opacity 0.2s;
+    }
+    .btn-withdraw:hover { opacity: 0.9; }
+
+    .profile-works-section {
+      background: var(--app-surface);
+      padding: 16px;
+    }
+    .profile-section-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: #FFF;
+      margin-bottom: 12px;
+    }
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .work-mini-card {
+      border-radius: 14px;
+      overflow: hidden;
+      cursor: pointer;
+      position: relative;
+      height: 110px;
+      display: flex;
+      align-items: flex-end;
+      padding: 10px;
+      transition: transform 0.2s;
+    }
+    .work-mini-card:hover { transform: translateY(-2px); }
+    .work-mini-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 30%, rgba(0,0,0,0.85) 100%);
+    }
+    .work-mini-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #FFF;
+      position: relative;
+      z-index: 2;
+      line-height: 1.3;
+    }
+    .work-mini-tag {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      font-size: 9px;
+      font-weight: 800;
+      padding: 3px 7px;
+      border-radius: 8px;
+      z-index: 2;
+    }
+
+
+
+    /* Modals Overlay */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      background: rgba(4, 3, 10, 0.88);
+      backdrop-filter: blur(12px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+    }
+    .modal-card {
+      background: var(--app-surface);
+      border: 1px solid var(--app-border);
+      border-radius: 22px;
+      width: 100%;
+      max-width: 480px;
+      padding: 20px;
+      box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
+    }
+
+    /* Studio de Création Multi-Formats */
+    .modal-card-large {
+      background: var(--app-surface);
+      border: 1px solid var(--app-border);
+      border-radius: 24px;
+      width: 100%;
+      max-width: 580px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      overflow: hidden;
+      box-shadow: 0 24px 50px -10px rgba(0,0,0,0.85);
+    }
+    .modal-studio-header {
+      padding: 14px 18px;
+      background: rgba(10, 7, 22, 0.95);
+      border-bottom: 1px solid var(--app-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-studio-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Stepper Navigation */
+    .studio-stepper {
+      display: flex;
+      gap: 6px;
+      background: rgba(255,255,255,0.03);
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.06);
+    }
+    .stepper-tab {
+      flex: 1;
+      text-align: center;
+      padding: 8px 4px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-sub);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: none;
+    }
+    .stepper-tab.active {
+      background: var(--app-violet);
+      color: #FFF;
+      box-shadow: 0 3px 10px var(--app-violet-glow);
+    }
+
+    /* Format Selection Cards Grid */
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+    @media (min-width: 480px) {
+      .format-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+    .format-card {
+      background: rgba(255,255,255,0.03);
+      border: 1.5px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 10px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .format-card:hover {
+      background: rgba(108,92,231,0.12);
+      border-color: rgba(108,92,231,0.4);
+    }
+    .format-card.selected {
+      background: rgba(108,92,231,0.22);
+      border-color: var(--app-violet);
+      box-shadow: 0 0 14px rgba(108,92,231,0.35);
+    }
+    .format-icon { font-size: 22px; }
+    .format-title { font-size: 11px; font-weight: 800; color: #FFF; }
+    .format-sub { font-size: 9px; color: var(--text-sub); }
+
+    /* Cover Presets */
+    .cover-presets {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding: 2px 0;
+    }
+    .cover-chip {
+      width: 46px;
+      height: 36px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: transform 0.2s;
+      flex-shrink: 0;
+    }
+    .cover-chip.selected {
+      border-color: #FFF;
+      transform: scale(1.08);
+      box-shadow: 0 0 10px rgba(255,255,255,0.5);
+    }
+
+    /* Media Uploader */
+    .media-upload-zone {
+      border: 2px dashed rgba(108,92,231,0.35);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: center;
+      background: rgba(108,92,231,0.04);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .media-upload-zone:hover {
+      background: rgba(108,92,231,0.08);
+      border-color: var(--app-violet);
+    }
+    /* Full Screen Premium Reader */
+    .reader-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1100;
+      background: var(--app-bg);
+      display: flex;
+      flex-direction: column;
+    }
+    .reader-sheet {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      overflow: hidden;
+    }
+    .reader-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--app-border);
+      background: var(--app-surface);
+      z-index: 10;
+    }
+    .reader-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      color: #FFF;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .reader-tag {
+      font-size: 12px;
+      font-weight: 900;
+      color: #A29BFE;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+    .reader-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 0 40px;
+    }
+    .reader-cover-banner {
+      height: 220px;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+    }
+    .reader-cover-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, transparent 20%, rgba(9,7,19,0.95) 100%);
+    }
+    .reader-title-section {
+      padding: 20px 20px 10px;
+    }
+    .reader-title {
+      font-size: 24px;
+      font-weight: 900;
+      color: #FFF;
+      line-height: 1.25;
+      margin-bottom: 6px;
+    }
+    .reader-author-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .reader-text-container {
+      padding: 16px 20px;
+      color: #E5E7EB;
+      font-family: 'Inter', sans-serif;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    .reader-text-container p {
+      margin-bottom: 16px;
+    }
+
+    .hidden { display: none !important; }
+
+    .input-box {
+      width: 100%;
+      background: #171333;
+      border: 1px solid var(--app-border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: #FFF;
+      font-size: 13px;
+      outline: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- SLEEK & ULTRA-CLEAN APP HEADER -->
+  <header class="app-header">
+    <div class="header-container">
+      <!-- Left: Logo & Brand -->
+      <div class="brand-box" onclick="switchView('feed')">
+        <div class="brand-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+        </div>
+        <div class="brand-title">BenSo</div>
+      </div>
+
+      <!-- Right: Sleek Actions (Search Icon + Notifications Icon) -->
+      <div class="header-actions">
+        <!-- Minimal Icon-Only Search Button -->
+        <button onclick="toggleSearchBar()" class="icon-btn-minimal" aria-label="Recherche">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+        </button>
+
+        <!-- Minimal Icon-Only Notification Bell -->
+        <div class="icon-btn-minimal" onclick="alert('Notifications BenSo : 3 nouvelles ventes et réactions !')" aria-label="Notifications">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span class="notif-badge">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Collapsible Search Input Box -->
+    <div id="search-bar-row" class="hidden" style="padding: 8px 4px 2px;">
+      <input type="text" id="search-input" onkeyup="filterPosts()" placeholder="Rechercher une histoire, un auteur..." class="search-input-box" />
+    </div>
+  </header>
+
+  <!-- FILTERS BAR BELOW HEADER WITH MESSAGING BUTTON ON THE RIGHT -->
+  <div class="filters-bar-wrapper">
+    <div class="filters-chips-left">
+      <button onclick="setFilter('all')" id="chip-all" class="chip active">Tout le fil</button>
+      <button onclick="setFilter('free')" id="chip-free" class="chip">Gratuit</button>
+    </div>
+
+    <!-- Messagerie Icon Button on the Right -->
+    <div class="msg-icon-btn" onclick="alert('Messagerie BenSo : Échangez en direct avec vos auteurs et lecteurs préférés !')">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      <span class="msg-dot"></span>
+    </div>
+  </div>
+
+  <!-- APP LAYOUT -->
+  <div class="app-layout">
+
+    <!-- LEFT SIDEBAR (Desktop) -->
+    <aside class="left-sidebar">
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <div class="menu-item active" onclick="switchView('feed')"><span style="font-size: 18px;">🏠</span> Fil d'actualité</div>
+        <div class="menu-item" onclick="switchView('explore')"><span style="font-size: 18px;">🧩</span> Catégories</div>
+        <div class="menu-item" onclick="switchView('library')"><span style="font-size: 18px;">📚</span> Ma Bibliothèque</div>
+        <div class="menu-item" onclick="switchView('profile')"><span style="font-size: 18px;">👤</span> Mon Profil Auteur</div>
+      </div>
+
+      <div style="background: linear-gradient(135deg, #181335, #261B4A); border: 1px solid rgba(108,92,231,0.3); border-radius: 16px; padding: 14px;">
+        <span style="font-size: 11px; color: var(--text-sub); display: block; margin-bottom: 2px;">Solde Créateur</span>
+        <p style="font-size: 18px; font-weight: 900; color: #FFF; margin-bottom: 8px;">14 500 F CFA</p>
+        <button onclick="alert('Retrait Mobile Money FedaPay initié !')" style="width: 100%; padding: 8px; border-radius: 10px; background: linear-gradient(135deg, #FF7675, #E66767); color: white; border: none; font-weight: 800; font-size: 11px; cursor: pointer;">
+          💳 Retirer mes gains
+        </button>
+      </div>
+    </aside>
+
+    <!-- CENTER MAIN FEED STREAM -->
+    <main class="main-feed">
+
+      <!-- VIEW 1: HOME SOCIAL FEED -->
+      <div id="view-feed" style="display: flex; flex-direction: column; gap: 14px;">
+        <div id="feed-stream" style="display: flex; flex-direction: column; gap: 14px;">
+          <!-- Dynamically Injected Post Cards -->
+        </div>
+      </div>
+
+      <!-- VIEW 2: EXPLORE — 4 CATEGORY CARDS (2x2 GRID) -->
+      <div id="view-explore" class="hidden" style="display: flex; flex-direction: column; gap: 16px;">
+
+        <!-- MAIN: Category Grid (shown by default) -->
+        <div id="explore-categories" style="display: flex; flex-direction: column; gap: 12px;">
+          <h2 style="font-size: 16px; font-weight: 900; color: #FFF; letter-spacing: -0.3px;">Explorer par format</h2>
+          <div class="explore-cat-grid">
+
+            <!-- LYRIC CARD -->
+            <div class="explore-cat-card" onclick="openExploreCategory('lyric', 'Lyric ✍️')"
+              style="background-image: url('lyric.png'); background-size: cover; background-position: center;">
+              <div class="explore-cat-overlay"></div>
+              <div class="explore-cat-label">Lyric</div>
+            </div>
+
+            <!-- IMAGES CARD -->
+            <div class="explore-cat-card" onclick="openExploreCategory('image', 'Images 🖼️')"
+              style="background-image: url('images.png'); background-size: cover; background-position: center top;">
+              <div class="explore-cat-overlay"></div>
+              <div class="explore-cat-label">Images</div>
+            </div>
+
+            <!-- VIDEO CARD -->
+            <div class="explore-cat-card" onclick="openExploreCategory('video', 'Vidéo 🎥')"
+              style="background-image: url('video.png'); background-size: cover; background-position: center;">
+              <div class="explore-cat-overlay"></div>
+              <div class="explore-cat-label">Vidéo</div>
+            </div>
+
+            <!-- AUDIO CARD -->
+            <div class="explore-cat-card" onclick="openExploreCategory('audio', 'Audio 🎙️')"
+              style="background-image: url('audio.png'); background-size: cover; background-position: center;">
+              <div class="explore-cat-overlay"></div>
+              <div class="explore-cat-label">Audio</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- SECONDARY: Stories filtered by selected category -->
+        <div id="explore-cat-detail" style="display: none; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <button onclick="backToExploreGrid()" class="btn-back-explore">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+              Retour
+            </button>
+            <h2 id="explore-cat-title" style="font-size: 15px; font-weight: 900; color: #FFF;"></h2>
+          </div>
+          <div id="explore-stream" style="display: flex; flex-direction: column; gap: 16px;"></div>
+        </div>
+
+      </div>
+
+
+      <!-- VIEW 3: LIBRARY -->
+      <div id="view-library" class="hidden" style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <h2 style="font-size: 18px; font-weight: 900; color: #FFF;">Ma Bibliothèque</h2>
+          <span id="library-count" class="tag-free badge-price-tag">0 œuvre débloquée</span>
+        </div>
+        <div id="library-list" style="display: flex; flex-direction: column; gap: 10px;"></div>
+      </div>
+
+      <!-- VIEW 4: PROFILE (Redesigned Full Profile Page) -->
+      <div id="view-profile" class="hidden profile-view">
+
+        <!-- Cover Banner -->
+        <div class="profile-cover-banner">
+          <div class="profile-cover-overlay"></div>
+        </div>
+
+        <!-- Profile Identity Block -->
+        <div class="profile-identity-block">
+          <div class="profile-avatar-wrap">
+            <div class="profile-avatar-big">BH</div>
+            <div class="profile-verified-badge">✓</div>
+          </div>
+
+          <div class="profile-meta">
+            <h2 class="profile-name">Ben HOUNSA</h2>
+            <p class="profile-handle">@benhounsa · <span>Auteur &amp; Promoteur</span></p>
+            <p class="profile-bio">Conteur du Bénin 🇧🇯 | Je transmets nos récits africains au monde entier. Culture, fantastique et épopée.</p>
+            <p class="profile-location">📍 Cotonou, Bénin</p>
+          </div>
+
+          <!-- Social Stats Row -->
+          <div class="profile-stats-row">
+            <div class="profile-stat-item">
+              <span class="stat-val">1.4K</span>
+              <span class="stat-label">Abonnés</span>
+            </div>
+            <div class="profile-stat-divider"></div>
+            <div class="profile-stat-item">
+              <span class="stat-val">348</span>
+              <span class="stat-label">Abonnements</span>
+            </div>
+            <div class="profile-stat-divider"></div>
+            <div class="profile-stat-item">
+              <span class="stat-val">3</span>
+              <span class="stat-label">Œuvres</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Earnings Dashboard Card -->
+        <div class="profile-earnings-card">
+          <div class="earnings-title">💰 Tableau de bord auteur</div>
+          <div class="earnings-grid">
+            <div class="earnings-item">
+              <span class="earnings-val green">14 500 F</span>
+              <span class="earnings-sub">Gains nets</span>
+            </div>
+            <div class="earnings-item">
+              <span class="earnings-val yellow">29</span>
+              <span class="earnings-sub">Ventes</span>
+            </div>
+            <div class="earnings-item">
+              <span class="earnings-val violet">85%</span>
+              <span class="earnings-sub">Votre part</span>
+            </div>
+          </div>
+          <button onclick="alert('Retrait Mobile Money FedaPay initié !')" class="btn-withdraw">
+            💳 Retirer mes gains · Mobile Money
+          </button>
+        </div>
+
+        <!-- Published Works Section -->
+        <div class="profile-works-section">
+          <h3 class="profile-section-title">📚 Mes publications</h3>
+          <div class="works-grid" id="profile-works-list">
+            <!-- Injected by JS -->
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+
+    <!-- RIGHT SIDEBAR (Desktop) -->
+    <aside class="right-sidebar">
+      <div class="post-card" style="padding: 14px;">
+        <h4 style="font-size: 13px; font-weight: 800; color: #FFF; margin-bottom: 10px;">🔥 Tendances BenSo</h4>
+        <div style="display: flex; flex-direction: column; gap: 8px; font-size: 12px;">
+          <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="openReader('story-1')">
+            <div>
+              <p style="font-weight: 800; color: #FFF;">L'Ombre du Baobab</p>
+              <p style="font-size: 10px; color: var(--text-sub);">Conte & Légende · 4 120 likes</p>
+            </div>
+            <span class="tag-premium badge-price-tag">500 FCFA</span>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; cursor: pointer;" onclick="openReader('story-2')">
+            <div>
+              <p style="font-weight: 800; color: #FFF;">Les Secrets de Kétou</p>
+              <p style="font-size: 10px; color: var(--text-sub);">Fantastique · 8 900 likes</p>
+            </div>
+            <span class="tag-premium badge-price-tag">1000 FCFA</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION -->
+  <nav class="mobile-bottom-nav">
+    <button onclick="switchView('feed')" id="tab-nav-feed" class="nav-tab active">
+      <span style="font-size: 18px;">🏠</span>
+      <span>Accueil</span>
+    </button>
+    <button onclick="switchView('explore')" id="tab-nav-explore" class="nav-tab">
+      <span style="font-size: 18px;">🧩</span>
+      <span>Explorer</span>
+    </button>
+    <button onclick="openPublishModal()" class="nav-tab-publish">
+      +
+    </button>
+    <button onclick="switchView('library')" id="tab-nav-library" class="nav-tab">
+      <span style="font-size: 18px;">📚</span>
+      <span>Biblio</span>
+    </button>
+    <button onclick="switchView('profile')" id="tab-nav-profile" class="nav-tab">
+      <span style="font-size: 18px;">👤</span>
+      <span>Profil</span>
+    </button>
+  </nav>
+
+  <!-- MODALS -->
+
+  <!-- PAYMENT MODAL -->
+  <div id="modal-payment" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--app-border); padding-bottom: 10px; margin-bottom: 14px;">
+        <h3 style="font-size: 16px; font-weight: 900; color: #FFF;">🔒 Paiement Mobile Money FedaPay</h3>
+        <button onclick="closeModal('modal-payment')" style="background: none; border: none; color: var(--text-sub); font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <div id="payment-summary" style="background: #171333; padding: 10px; border-radius: 14px; display: flex; align-items: center; gap: 10px; margin-bottom: 14px;"></div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 6px;">Réseau Mobile Money</label>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; font-size: 11px; font-weight: 800;">
+          <div style="padding: 8px; background: rgba(241,196,15,0.15); border: 1px solid #F1C40F; color: #F1C40F; border-radius: 10px;">MTN MoMo</div>
+          <div style="padding: 8px; background: rgba(54,162,235,0.15); border: 1px solid #36A2EB; color: #36A2EB; border-radius: 10px;">Moov</div>
+          <div style="padding: 8px; background: rgba(0,210,255,0.15); border: 1px solid #00D2FF; color: #00D2FF; border-radius: 10px;">Wave</div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 14px;">
+        <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Numéro de téléphone</label>
+        <input type="tel" id="pay-phone-input" placeholder="+229 97 00 00 00" class="input-box" />
+      </div>
+
+      <button onclick="confirmPayment()" style="width: 100%; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #FF7675, #E66767); color: white; border: none; font-weight: 900; font-size: 13px; cursor: pointer;">
+        Confirmer & Débloquer
+      </button>
+    </div>
+  </div>
+
+  <!-- READER FULL-SCREEN MODAL -->
+  <div id="modal-reader" class="reader-overlay hidden">
+    <div class="reader-sheet">
+      <!-- Reader Top Bar -->
+      <div class="reader-topbar">
+        <button onclick="closeModal('modal-reader')" class="reader-back-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m15 18-6-6 6-6"/></svg>
+          Retour
+        </button>
+        <span class="reader-tag">Lecteur BenSo</span>
+        <div style="width:60px;"></div>
+      </div>
+
+      <!-- Story Content -->
+      <div id="reader-body" class="reader-content"></div>
+    </div>
+  </div>
+
+
+
+  <!-- PUBLISH STORY MODAL (STUDIO DE CRÉATION MULTI-FORMATS) -->
+  <div id="modal-publish" class="modal-overlay hidden">
+    <div class="modal-card-large">
+      
+      <!-- Studio Header -->
+      <div class="modal-studio-header">
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <div style="width: 28px; height: 28px; border-radius: 8px; background: linear-gradient(135deg, #FF7675, #6C5CE7); display: flex; align-items: center; justify-content: center; font-size: 14px;">✨</div>
+          <h3 style="font-size: 16px; font-weight: 900; color: #FFF;">Studio de Création BenSo</h3>
+        </div>
+        <button onclick="closeModal('modal-publish')" style="background: none; border: none; color: var(--text-sub); font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+
+      <!-- Stepper Tabs -->
+      <div style="padding: 12px 18px 0;">
+        <div class="studio-stepper">
+          <button id="step-tab-1" class="stepper-tab active" onclick="goToCreateStep(1)">1. Format & Infos</button>
+          <button id="step-tab-2" class="stepper-tab" onclick="goToCreateStep(2)">2. Contenu & Médias</button>
+          <button id="step-tab-3" class="stepper-tab" onclick="goToCreateStep(3)">3. Tarif & Aperçu</button>
+        </div>
+      </div>
+
+      <!-- Studio Form Body -->
+      <div class="modal-studio-body">
+        
+        <!-- STEP 1: Format & Infos -->
+        <div id="create-step-1" class="create-step-content">
+          <label style="font-size: 11px; font-weight: 800; color: #D1D5DB; display: block; margin-bottom: 8px;">Choisissez le format de votre récit</label>
+          <div class="format-grid">
+            <div class="format-card selected" id="fmt-ecrit" onclick="selectFormat('ecrit', '✍️ Récit Écrit')">
+              <span class="format-icon">✍️</span>
+              <span class="format-title">Écrit / Lyric</span>
+              <span class="format-sub">Poésie, contes</span>
+            </div>
+            <div class="format-card" id="fmt-image" onclick="selectFormat('image', '🖼️ Bande Dessinée')">
+              <span class="format-icon">🖼️</span>
+              <span class="format-title">Images / BD</span>
+              <span class="format-sub">Planches illustrées</span>
+            </div>
+            <div class="format-card" id="fmt-audio" onclick="selectFormat('audio', '🎙️ Conte Audio')">
+              <span class="format-icon">🎙️</span>
+              <span class="format-title">Audio</span>
+              <span class="format-sub">Vocaux, podcasts</span>
+            </div>
+            <div class="format-card" id="fmt-video" onclick="selectFormat('video', '🎥 Épisode Vidéo')">
+              <span class="format-icon">🎥</span>
+              <span class="format-title">Vidéo</span>
+              <span class="format-sub">Séries & courts</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 14px; display: flex; flex-direction: column; gap: 10px;">
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Titre de l'histoire</label>
+              <input type="text" id="pub-title" oninput="updateLivePreview()" placeholder="ex: L'Héritage des Rois d'Abomey" class="input-box" />
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Catégorie</label>
+                <select id="pub-category" onchange="updateLivePreview()" class="input-box">
+                  <option>Conte & Légende</option>
+                  <option>Roman & Fiction</option>
+                  <option>Histoire & Culture</option>
+                  <option>Fantastique</option>
+                  <option>Société & Vie</option>
+                </select>
+              </div>
+
+              <div>
+                <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Ambiance Couverture</label>
+                <div class="cover-presets">
+                  <div class="cover-chip selected" id="cov-preset-1" onclick="selectCoverPreset('linear-gradient(135deg,#4A1942,#C0392B,#E67E22)', 1)" style="background: linear-gradient(135deg,#4A1942,#C0392B,#E67E22);"></div>
+                  <div class="cover-chip" id="cov-preset-2" onclick="selectCoverPreset('linear-gradient(135deg,#1A1A2E,#16213E,#533483)', 2)" style="background: linear-gradient(135deg,#1A1A2E,#16213E,#533483);"></div>
+                  <div class="cover-chip" id="cov-preset-3" onclick="selectCoverPreset('linear-gradient(135deg,#134E5E,#71B280)', 3)" style="background: linear-gradient(135deg,#134E5E,#71B280);"></div>
+                  <div class="cover-chip" id="cov-preset-4" onclick="selectCoverPreset('linear-gradient(135deg,#7B2D8B,#E91E8C)', 4)" style="background: linear-gradient(135deg,#7B2D8B,#E91E8C);"></div>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Accroche / Extrait (Aperçu dans le fil)</label>
+              <textarea id="pub-excerpt" oninput="updateLivePreview()" rows="2" placeholder="Une courte description fascinante qui donne envie d'ouvrir l'histoire..." class="input-box"></textarea>
+            </div>
+          </div>
+
+          <button onclick="goToCreateStep(2)" style="width: 100%; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #6C5CE7, #5B4BC4); color: white; border: none; font-weight: 800; font-size: 13px; cursor: pointer; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+            Étape suivante : Contenu & Médias ➔
+          </button>
+        </div>
+
+        <!-- STEP 2: Contenu & Médias -->
+        <div id="create-step-2" class="create-step-content hidden">
+          
+          <!-- Text/Lyric Container -->
+          <div id="content-box-ecrit">
+            <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Rédiger le texte complet de l'histoire</label>
+            <textarea id="pub-text" rows="7" placeholder="Racontez votre récit ici..." class="input-box" style="line-height: 1.6; font-size: 13px;"></textarea>
+            <span style="font-size: 10px; color: var(--text-sub); display: block; margin-top: 4px; text-align: right;">💡 Astuce : Sautez des lignes pour séparer vos paragraphes.</span>
+          </div>
+
+          <!-- Image/BD Container -->
+          <div id="content-box-image" class="hidden">
+            <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 6px;">Planches de Bande Dessinée / Illustrations</label>
+            <div class="media-upload-zone" onclick="document.getElementById('img-file-input').click()">
+              <div style="font-size: 28px; margin-bottom: 4px;">📸</div>
+              <p style="font-size: 12px; font-weight: 800; color: #FFF;">Cliquez pour simuler l'ajout de planches BD</p>
+              <p style="font-size: 10px; color: var(--text-sub); margin-top: 2px;">Formats acceptés : PNG, JPG, WebP</p>
+              <input type="file" id="img-file-input" accept="image/*" style="display: none;" onchange="handleImageUpload(this)" />
+            </div>
+            <div id="img-preview-list" style="margin-top: 10px; display: flex; gap: 8px; overflow-x: auto;">
+              <!-- Uploaded thumbnail preview -->
+            </div>
+          </div>
+
+          <!-- Audio Container -->
+          <div id="content-box-audio" class="hidden">
+            <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 6px;">Enregistrement Vocal ou Fichier Audio</label>
+            <div style="background: rgba(162,155,254,0.08); border: 1px solid rgba(162,155,254,0.2); border-radius: 16px; padding: 16px; text-align: center; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+              <button type="button" id="rec-audio-btn" onclick="toggleAudioRecorder()" style="width: 56px; height: 56px; border-radius: 50%; background: linear-gradient(135deg, #FF7675, #E66767); border: none; color: #FFF; font-size: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 15px rgba(255,118,117,0.4); transition: transform 0.2s;">
+                🎙️
+              </button>
+              <p id="audio-rec-status" style="font-size: 12px; font-weight: 800; color: #FFF;">Cliquez sur le micro pour démarrer l'enregistrement</p>
+              <p style="font-size: 10px; color: var(--text-sub);">Le récit audio sera sauvegardé et intégrera votre lecteur.</p>
+            </div>
+          </div>
+
+          <!-- Video Container -->
+          <div id="content-box-video" class="hidden">
+            <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 6px;">Fichier MP4 ou Lien de la Vidéo</label>
+            <input type="text" id="pub-video-url" placeholder="https://... (Lien de votre vidéo MP4 ou épisode)" class="input-box" />
+            <span style="font-size: 10px; color: var(--text-sub); display: block; margin-top: 4px;">Votre épisode vidéo sera directement lisible dans l'application.</span>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 14px;">
+            <button onclick="goToCreateStep(1)" style="flex: 1; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.1); font-weight: 800; font-size: 12px; cursor: pointer;">
+              ⬅ Retour
+            </button>
+            <button onclick="goToCreateStep(3)" style="flex: 2; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #6C5CE7, #5B4BC4); color: white; border: none; font-weight: 800; font-size: 12px; cursor: pointer;">
+              Tarif & Aperçu ➔
+            </button>
+          </div>
+
+        </div>
+
+        <!-- STEP 3: Tarif & Publication & Live Preview -->
+        <div id="create-step-3" class="create-step-content hidden">
+
+          <!-- Pricing Section -->
+          <div style="background: #171333; padding: 14px; border-radius: 16px; border: 1px solid var(--app-border);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h4 style="font-size: 13px; font-weight: 800; color: #FFF;">Monétisation Mobile Money</h4>
+                <p style="font-size: 10px; color: var(--text-sub);">Activer la vente par MTN MoMo, Moov & Wave</p>
+              </div>
+              <input type="checkbox" id="pub-is-premium" onchange="togglePricingBox(this.checked)" style="width: 20px; height: 20px; accent-color: #FF7675; cursor: pointer;" />
+            </div>
+
+            <div id="pub-price-box" class="hidden" style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1);">
+              <label style="font-size: 11px; font-weight: 700; color: #D1D5DB; display: block; margin-bottom: 4px;">Prix de vente (F CFA)</label>
+              <input type="number" id="pub-price" min="100" step="100" value="500" oninput="calculatePayout(this.value); updateLivePreview();" class="input-box" style="color: #F1C40F; font-size: 16px; font-weight: 900;" />
+              <p style="font-size: 11px; color: #2ECC71; font-weight: 700; margin-top: 6px;">
+                💰 Vos gains créateur : <span id="payout-calc">425 F CFA</span> par déblocage (85%)
+              </p>
+            </div>
+          </div>
+
+          <!-- Live Card Preview -->
+          <div style="margin-top: 10px;">
+            <label style="font-size: 10px; font-weight: 800; color: #A29BFE; display: block; margin-bottom: 6px; letter-spacing: 0.5px;">👁️ APERÇU DANS LE FIL BENSO</label>
+            <div id="live-preview-card">
+              <!-- Rendered via updateLivePreview() -->
+            </div>
+          </div>
+
+          <div style="display: flex; gap: 8px; margin-top: 14px;">
+            <button onclick="goToCreateStep(2)" style="flex: 1; padding: 12px; border-radius: 14px; background: rgba(255,255,255,0.06); color: white; border: 1px solid rgba(255,255,255,0.1); font-weight: 800; font-size: 12px; cursor: pointer;">
+              ⬅ Retour
+            </button>
+            <button onclick="handlePublishSubmit()" style="flex: 2; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #FF7675, #E66767); color: white; border: none; font-weight: 900; font-size: 13px; cursor: pointer; box-shadow: 0 4px 15px rgba(255,118,117,0.4);">
+              🚀 Publier sur BenSo
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- AUTH OTP MODAL -->
+  <div id="modal-login" class="modal-overlay hidden">
+    <div class="modal-card">
+      <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--app-border); padding-bottom: 10px; margin-bottom: 12px;">
+        <h3 style="font-size: 16px; font-weight: 900; color: #FFF;">📱 Connexion OTP Mobile</h3>
+        <button onclick="closeModal('modal-login')" style="background: none; border: none; color: var(--text-sub); font-size: 18px; cursor: pointer;">✕</button>
+      </div>
+      <p style="font-size: 12px; color: #C7D2FE; margin-bottom: 12px;">Entrez votre numéro Mobile Money pour vous connecter par SMS.</p>
+      <input type="tel" id="otp-phone-input" placeholder="+229 97 00 00 00" class="input-box" style="margin-bottom: 12px;" />
+      <button onclick="alert('Code OTP envoyé par SMS !'); closeModal('modal-login');" style="width: 100%; padding: 12px; border-radius: 14px; background: linear-gradient(135deg, #6C5CE7, #5B4BC4); color: white; border: none; font-weight: 900; font-size: 13px; cursor: pointer;">
+        Recevoir le code SMS
+      </button>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT ENGINE -->
+  <script>
+    const COVERS = {
+      "Conte & Légende":   "linear-gradient(135deg,#4A1942,#C0392B,#E67E22)",
+      "Fantastique":       "linear-gradient(135deg,#1A1A2E,#16213E,#533483)",
+      "Histoire & Culture":"linear-gradient(135deg,#134E5E,#71B280)",
+      "Roman & Fiction":   "linear-gradient(135deg,#7B2D8B,#E91E8C)",
+    };
+
+    const stories = [
+      {
+        id: 'story-1',
+        title: "L'Ombre du Baobab",
+        author: "Amina Kouyaté",
+        handle: "@amina.k",
+        avatar: "AK",
+        avatarBg: "#C0392B",
+        category: "Conte & Légende",
+        format: "ecrit",
+        formatLabel: "✍️ Récit Écrit",
+        isPremium: true,
+        priceFCFA: 500,
+        likes: 4120,
+        comments: 892,
+        excerpt: "Sous les étoiles du Mali, une jeune femme mystérieuse détient les secrets d'un arbre millénaire. Une quête de mémoire et de vérité commence..."
+      },
+      {
+        id: 'story-2',
+        title: "Les Secrets de Kétou",
+        author: "Amara Diop",
+        handle: "@amara_diop",
+        avatar: "AD",
+        avatarBg: "#533483",
+        category: "Fantastique",
+        format: "image",
+        formatLabel: "🖼️ Bande Dessinée",
+        isPremium: true,
+        priceFCFA: 1000,
+        likes: 8900,
+        comments: 1540,
+        excerpt: "Quand la tradition rencontre le destin moderne, les esprits de la forêt murmurent un amour interdit capable de soulever des royaumes."
+      },
+      {
+        id: 'story-3',
+        title: "Les Amazones du Dahomey",
+        author: "Ben HOUNSA",
+        handle: "@benhounsa",
+        avatar: "BH",
+        avatarBg: "#134E5E",
+        category: "Histoire & Culture",
+        format: "video",
+        formatLabel: "🎥 Épisode Vidéo",
+        isPremium: false,
+        likes: 1250,
+        comments: 340,
+        excerpt: "Plongez au cœur du XIXe siècle dans le royaume du Danxomé. Découvrez le courage sans égal des Agoodjiés, guerrières intrépides."
+      }
+    ];
+
+    let unlockedIds = [];
+    let currentStoryToPay = null;
+
+    function renderFeed(filter = 'all') {
+      const container = document.getElementById('feed-stream');
+      container.innerHTML = '';
+
+      const items = stories.filter(s => {
+        if (filter === 'free') return !s.isPremium;
+        if (filter === 'premium') return s.isPremium;
+        return true;
+      });
+
+      items.forEach(story => {
+        const isUnlocked = unlockedIds.includes(story.id);
+        const coverBg = COVERS[story.category] || 'linear-gradient(135deg,#1A162F,#2D2652)';
+        const card = document.createElement('article');
+        card.className = "post-card";
+        
+        // Whole card click handler
+        card.onclick = (e) => {
+          // If clicked directly on an interaction button, don't open modal
+          if (e.target.closest('.btn-interaction')) return;
+          if (story.isPremium && !isUnlocked) {
+            openPaymentModal(story.id);
+          } else {
+            openReader(story.id);
+          }
+        };
+
+        card.innerHTML = `
+          <!-- Header with Round Avatar & Price Tag -->
+          <div class="post-header">
+            <div class="author-info-box">
+              <div class="user-avatar-round" style="background:${story.avatarBg};">${story.avatar}</div>
+              <div>
+                <div class="author-name">${story.author} <span style="color:#6C5CE7;">✓</span></div>
+                <div class="author-sub">${story.handle} · ${story.category}</div>
+              </div>
+            </div>
+            ${story.isPremium 
+              ? `<span class="tag-premium badge-price-tag">${isUnlocked ? '✓ Débloqué' : '🔒 ' + story.priceFCFA + ' FCFA'}</span>` 
+              : `<span class="tag-free badge-price-tag">Gratuit</span>`}
+          </div>
+
+          <!-- Taller Prominent Cover Image Banner -->
+          <div class="post-cover-banner" style="background:${coverBg};">
+            <div class="post-cover-overlay"></div>
+            <h3 class="post-cover-title">${story.title}</h3>
+          </div>
+
+          <!-- Excerpt Paragraph -->
+          <div class="post-body">
+            <p>${story.excerpt}</p>
+          </div>
+
+          <!-- Professional Action CTA -->
+          <div class="post-cta-container">
+            ${story.isPremium && !isUnlocked 
+              ? `<button class="btn-cta-pro btn-coral-cta">🔒 Accéder à l'épisode · ${story.priceFCFA} F CFA</button>`
+              : `<button class="btn-cta-pro btn-violet-cta">📖 Découvrir le récit complet</button>`}
+          </div>
+
+          <!-- Social Interaction Bar (Bottom of Card) -->
+          <div class="post-actions-bottom">
+            <button onclick="toggleLike(event, this, '${story.id}')" class="btn-interaction">❤️ <span>${story.likes}</span></button>
+            <button onclick="event.stopPropagation(); alert('Commentaires BenSo');" class="btn-interaction">💬 <span>${story.comments}</span></button>
+            <button onclick="event.stopPropagation(); alert('Lien partagé !');" class="btn-interaction">🔗 <span>Partager</span></button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+
+    function openExploreCategory(format, title) {
+      // Hide category grid, show detail panel
+      document.getElementById('explore-categories').style.display = 'none';
+      const detail = document.getElementById('explore-cat-detail');
+      detail.style.display = 'flex';
+      document.getElementById('explore-cat-title').textContent = title;
+      renderExploreFeed(format);
+    }
+
+    function backToExploreGrid() {
+      document.getElementById('explore-cat-detail').style.display = 'none';
+      document.getElementById('explore-categories').style.display = 'flex';
+    }
+
+    function renderExploreFeed(format) {
+      const container = document.getElementById('explore-stream');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const items = stories.filter(s => s.format === format);
+
+      if (items.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding: 40px 16px; color: var(--text-sub); font-size: 13px;">
+          <div style="font-size:32px; margin-bottom:8px;">📭</div>
+          Aucune histoire disponible dans ce format pour l'instant.
+        </div>`;
+        return;
+      }
+
+      items.forEach(story => {
+        const isUnlocked = unlockedIds.includes(story.id);
+        const coverBg = COVERS[story.category] || 'linear-gradient(135deg,#1A162F,#2D2652)';
+        const card = document.createElement('article');
+        card.className = 'post-card';
+        card.onclick = (e) => {
+          if (e.target.closest('.btn-interaction')) return;
+          if (story.isPremium && !isUnlocked) { openPaymentModal(story.id); }
+          else { openReader(story.id); }
+        };
+        card.innerHTML = `
+          <div class="post-header">
+            <div class="author-info-box">
+              <div class="user-avatar-round" style="background:${story.avatarBg};">${story.avatar}</div>
+              <div>
+                <div class="author-name">${story.author} <span style="color:#6C5CE7;">✓</span></div>
+                <div class="author-sub">${story.handle} · <strong style="color:#A29BFE;">${story.formatLabel || story.category}</strong></div>
+              </div>
+            </div>
+            ${story.isPremium
+              ? `<span class="tag-premium badge-price-tag">${isUnlocked ? '✓ Débloqué' : '🔒 ' + story.priceFCFA + ' FCFA'}</span>`
+              : `<span class="tag-free badge-price-tag">Gratuit</span>`}
+          </div>
+          <div class="post-cover-banner" style="background:${coverBg};">
+            <div class="post-cover-overlay"></div>
+            <h3 class="post-cover-title">${story.title}</h3>
+          </div>
+          <div class="post-body"><p>${story.excerpt}</p></div>
+          <div class="post-cta-container">
+            ${story.isPremium && !isUnlocked
+              ? `<button class="btn-cta-pro btn-coral-cta">🔒 Accéder à l'épisode · ${story.priceFCFA} F CFA</button>`
+              : `<button class="btn-cta-pro btn-violet-cta">📖 Découvrir le récit complet</button>`}
+          </div>
+          <div class="post-actions-bottom">
+            <button onclick="toggleLike(event, this, '${story.id}')" class="btn-interaction">❤️ <span>${story.likes}</span></button>
+            <button onclick="event.stopPropagation(); alert('Commentaires BenSo');" class="btn-interaction">💬 <span>${story.comments}</span></button>
+            <button onclick="event.stopPropagation(); alert('Lien partagé !');" class="btn-interaction">🔗 <span>Partager</span></button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+
+
+    function toggleSearchBar() {
+      const row = document.getElementById('search-bar-row');
+      row.classList.toggle('hidden');
+    }
+
+    function switchView(view) {
+      ['feed', 'explore', 'library', 'profile'].forEach(v => {
+        document.getElementById('view-' + v).classList.add('hidden');
+        const navTab = document.getElementById('tab-nav-' + v);
+        if (navTab) navTab.classList.remove('active');
+      });
+      document.getElementById('view-' + view).classList.remove('hidden');
+      const activeNavTab = document.getElementById('tab-nav-' + view);
+      if (activeNavTab) activeNavTab.classList.add('active');
+
+      // Show filter bar ONLY on the feed view
+      const filterBar = document.querySelector('.filters-bar-wrapper');
+      if (filterBar) {
+        filterBar.style.display = view === 'feed' ? 'flex' : 'none';
+      }
+
+      if (view === 'explore') {
+        // Always reset to category grid when switching to explore
+        document.getElementById('explore-categories').style.display = 'flex';
+        document.getElementById('explore-cat-detail').style.display = 'none';
+      }
+      if (view === 'profile') {
+        renderProfileWorks();
+      }
+    }
+
+
+    function renderProfileWorks() {
+      const container = document.getElementById('profile-works-list');
+      if (!container) return;
+      container.innerHTML = '';
+      stories.forEach(story => {
+        const coverBg = COVERS[story.category] || 'linear-gradient(135deg,#1A162F,#2D2652)';
+        const card = document.createElement('div');
+        card.className = 'work-mini-card';
+        card.style.background = coverBg;
+        card.onclick = () => openReader(story.id);
+        card.innerHTML = `
+          <div class="work-mini-overlay"></div>
+          <span class="work-mini-tag ${story.isPremium ? 'tag-premium' : 'tag-free'}">${story.isPremium ? '🔒' : '✓'}</span>
+          <span class="work-mini-title">${story.title}</span>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function setFilter(f) {
+      document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+      const chip = document.getElementById('chip-' + f);
+      if (chip) chip.classList.add('active');
+      renderFeed(f);
+    }
+
+    function openPaymentModal(storyId) {
+      currentStoryToPay = stories.find(s => s.id === storyId);
+      const summary = document.getElementById('payment-summary');
+      summary.innerHTML = `
+        <div class="user-avatar-xs" style="background:${currentStoryToPay.avatarBg}">${currentStoryToPay.avatar}</div>
+        <div>
+          <h4 style="font-weight:800;font-size:13px;color:#FFF;">${currentStoryToPay.title}</h4>
+          <p style="font-size:11px;color:#FF7675;font-weight:bold;">${currentStoryToPay.priceFCFA} F CFA</p>
+        </div>
+      `;
+      document.getElementById('modal-payment').classList.remove('hidden');
+    }
+
+    function confirmPayment() {
+      const phone = document.getElementById('pay-phone-input').value;
+      if (!phone || phone.length < 8) { alert('Veuillez saisir un numéro valide.'); return; }
+      alert(`Paiement de ${currentStoryToPay.priceFCFA} F CFA confirmé via FedaPay avec le numéro ${phone} ! L'œuvre est débloquée.`);
+      unlockedIds.push(currentStoryToPay.id);
+      closeModal('modal-payment');
+      renderFeed();
+      renderLibrary();
+    }
+
+    function openReader(storyId) {
+      const story = stories.find(s => s.id === storyId);
+      if (!story) return;
+      const container = document.getElementById('reader-body');
+      const coverBg = story.coverGradient || COVERS[story.category] || 'linear-gradient(135deg,#1A162F,#2D2652)';
+      
+      let contentHtml = '';
+
+      if (story.format === 'image') {
+        contentHtml = `
+          <div class="reader-cover-banner" style="background:${coverBg};">
+            <div class="reader-cover-overlay"></div>
+          </div>
+          <div class="reader-title-section">
+            <h2 class="reader-title">${story.title}</h2>
+            <div class="reader-author-info">
+              <div class="user-avatar-xs" style="background:${story.avatarBg}">${story.avatar}</div>
+              <span style="font-size:12px;color:#A29BFE;">Par ${story.author} · ${story.formatLabel || 'BD / Bande Dessinée'}</span>
+            </div>
+          </div>
+          <div style="padding: 16px 20px; display: flex; flex-direction: column; gap: 14px;">
+            <p style="font-size:13px; color:var(--text-sub); margin-bottom:8px; line-height:1.5;">
+              ${story.excerpt || 'Défilez pour lire les planches de l\'œuvre.'}
+            </p>
+            <div style="border-radius:14px; overflow:hidden; border: 1.5px solid var(--app-border);">
+              <img src="images.png" style="width:100%; display:block;" alt="Planche 1" />
+            </div>
+            <div style="border-radius:14px; overflow:hidden; border: 1.5px solid var(--app-border); position: relative; background: #000; height: 300px; display: flex; align-items: center; justify-content: center;">
+              <img src="images.png" style="width:100%; height:100%; object-fit: cover; opacity: 0.8;" alt="Planche 2" />
+              <div style="position:absolute; bottom:0; left:0; right:0; background:linear-gradient(0deg, rgba(0,0,0,0.9), transparent); padding:16px; text-align:center;">
+                <p style="font-size:12px; font-weight:bold; color:#FFF; margin:0;">Planche 2 : Le réveil des ancêtres</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else if (story.format === 'video') {
+        contentHtml = `
+          <div class="reader-cover-banner" style="background:${coverBg}; height: 240px; display:flex; align-items:center; justify-content:center; position:relative;">
+            <div class="reader-cover-overlay"></div>
+            <button onclick="alert('Lancement du lecteur vidéo...')" style="width:70px; height:70px; border-radius:50%; background:#FF7675; border:none; color:#FFF; font-size:24px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 0 30px rgba(255,118,117,0.6); position:relative; z-index:2;">
+              ▶
+            </button>
+            <div style="position:absolute; bottom:10px; left:10px; right:10px; background:rgba(0,0,0,0.6); backdrop-filter:blur(8px); padding:8px 12px; border-radius:10px; display:flex; align-items:center; justify-content:space-between; font-size:11px; color:#FFF; z-index:2;">
+              <span>0:00 / 14:35</span>
+              <div style="flex:1; margin:0 12px; height:4px; background:rgba(255,255,255,0.3); border-radius:2px; position:relative;">
+                <div style="position:absolute; left:0; top:0; height:100%; width:15%; background:#FF7675; border-radius:2px;"></div>
+              </div>
+              <span>1080p HD</span>
+            </div>
+          </div>
+          <div class="reader-title-section">
+            <h2 class="reader-title">${story.title}</h2>
+            <div class="reader-author-info">
+              <div class="user-avatar-xs" style="background:${story.avatarBg}">${story.avatar}</div>
+              <span style="font-size:12px;color:#A29BFE;">Par ${story.author} · ${story.formatLabel || 'Vidéo'}</span>
+            </div>
+          </div>
+          <div class="reader-text-container">
+            <p>${story.excerpt}</p>
+          </div>
+        `;
+      } else if (story.format === 'audio') {
+        contentHtml = `
+          <div class="reader-cover-banner" style="background:${coverBg}; height: 240px; display:flex; align-items:center; justify-content:center; position:relative;">
+            <div class="reader-cover-overlay"></div>
+            <div style="width:130px; height:130px; border-radius:50%; background:linear-gradient(135deg,#FF7675,#6C5CE7); border:4px solid #A29BFE; box-shadow:0 10px 30px rgba(0,0,0,0.6); position:relative; z-index:2; display:flex; align-items:center; justify-content:center; font-size:40px;">
+              🎙️
+            </div>
+          </div>
+          <div class="reader-title-section" style="text-align:center;">
+            <h2 class="reader-title">${story.title}</h2>
+            <p style="font-size:12px; color:#A29BFE;">Par ${story.author} · ${story.formatLabel || 'Audio'}</p>
+            <div style="display:flex; justify-content:center; gap:3px; height:30px; align-items:center; margin:16px 0;">
+              <div style="width:3px; height:15px; background:#A29BFE; border-radius:2px;"></div>
+              <div style="width:3px; height:24px; background:#A29BFE; border-radius:2px;"></div>
+              <div style="width:3px; height:10px; background:#A29BFE; border-radius:2px;"></div>
+              <div style="width:3px; height:28px; background:#A29BFE; border-radius:2px;"></div>
+              <div style="width:3px; height:18px; background:#A29BFE; border-radius:2px;"></div>
+            </div>
+            <div style="background:#14102B; padding:16px; border-radius:18px; display:flex; flex-direction:column; gap:12px; max-width:320px; margin:0 auto;">
+              <div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--text-sub);">
+                <span>0:00</span>
+                <div style="flex:1; margin:0 12px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px; position:relative;">
+                  <div style="position:absolute; left:0; top:0; height:100%; width:20%; background:#A29BFE; border-radius:2px;"></div>
+                </div>
+                <span>4:15</span>
+              </div>
+              <div style="display:flex; justify-content:center; align-items:center; gap:20px;">
+                <button style="background:none; border:none; color:#FFF; font-size:16px; cursor:pointer;">⏮</button>
+                <button onclick="alert('Lecture du récit audio...')" style="width:48px; height:48px; border-radius:50%; background:#A29BFE; border:none; color:#090713; font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:bold;">▶</button>
+                <button style="background:none; border:none; color:#FFF; font-size:16px; cursor:pointer;">⏭</button>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        const paragraphs = (story.content || story.excerpt || "Le soleil se levait à peine sur les collines dorées lorsque les premiers tambours résonnèrent au loin...")
+          .split('\n')
+          .filter(p => p.trim())
+          .map(p => `<p>${p}</p>`)
+          .join('');
+
+        contentHtml = `
+          <div class="reader-cover-banner" style="background:${coverBg};">
+            <div class="reader-cover-overlay"></div>
+          </div>
+          <div class="reader-title-section">
+            <h2 class="reader-title">${story.title}</h2>
+            <div class="reader-author-info">
+              <div class="user-avatar-xs" style="background:${story.avatarBg}">${story.avatar}</div>
+              <span style="font-size:12px;color:#A29BFE;">Par ${story.author} · ${story.formatLabel || story.category}</span>
+            </div>
+          </div>
+          <div class="reader-text-container">
+            ${paragraphs}
+          </div>
+        `;
+      }
+
+      container.innerHTML = contentHtml;
+      document.getElementById('modal-reader').classList.remove('hidden');
+    }
+
+    // Studio de Création Logic
+    let currentCreateStep = 1;
+    let selectedFormat = 'ecrit';
+    let selectedFormatLabel = '✍️ Récit Écrit';
+    let selectedCoverGradient = 'linear-gradient(135deg,#4A1942,#C0392B,#E67E22)';
+    let isRecordingAudio = false;
+
+    function openPublishModal() {
+      goToCreateStep(1);
+      updateLivePreview();
+      document.getElementById('modal-publish').classList.remove('hidden');
+    }
+
+    function openLoginModal() {
+      document.getElementById('modal-login').classList.remove('hidden');
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).classList.add('hidden');
+    }
+
+    function goToCreateStep(step) {
+      currentCreateStep = step;
+      [1, 2, 3].forEach(s => {
+        const stepEl = document.getElementById(`create-step-${s}`);
+        if (stepEl) stepEl.classList.toggle('hidden', s !== step);
+        const tab = document.getElementById(`step-tab-${s}`);
+        if (tab) tab.classList.toggle('active', s === step);
+      });
+      if (step === 3) updateLivePreview();
+    }
+
+    function selectFormat(fmtKey, label) {
+      selectedFormat = fmtKey;
+      selectedFormatLabel = label;
+      ['ecrit', 'image', 'audio', 'video'].forEach(k => {
+        const card = document.getElementById(`fmt-${k}`);
+        if (card) card.classList.toggle('selected', k === fmtKey);
+        const box = document.getElementById(`content-box-${k}`);
+        if (box) box.classList.toggle('hidden', k !== fmtKey);
+      });
+      updateLivePreview();
+    }
+
+    function selectCoverPreset(gradientStr, index) {
+      selectedCoverGradient = gradientStr;
+      [1, 2, 3, 4].forEach(i => {
+        const chip = document.getElementById(`cov-preset-${i}`);
+        if (chip) chip.classList.toggle('selected', i === index);
+      });
+      updateLivePreview();
+    }
+
+    function togglePricingBox(checked) {
+      const box = document.getElementById('pub-price-box');
+      if (box) box.classList.toggle('hidden', !checked);
+      calculatePayout(document.getElementById('pub-price').value);
+      updateLivePreview();
+    }
+
+    function calculatePayout(val) {
+      const p = Number(val) || 0;
+      const payout = Math.round(p * 0.85);
+      const el = document.getElementById('payout-calc');
+      if (el) el.textContent = `${payout} F CFA`;
+    }
+
+    function handleImageUpload(input) {
+      const previewList = document.getElementById('img-preview-list');
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const thumb = document.createElement('div');
+          thumb.style.cssText = 'width:60px; height:60px; border-radius:10px; overflow:hidden; border:2px solid #6C5CE7; flex-shrink:0; position:relative;';
+          thumb.innerHTML = `<img src="${e.target.result}" style="width:100%; height:100%; object-fit:cover;" />`;
+          previewList.appendChild(thumb);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    function toggleAudioRecorder() {
+      const btn = document.getElementById('rec-audio-btn');
+      const status = document.getElementById('audio-rec-status');
+      isRecordingAudio = !isRecordingAudio;
+      if (isRecordingAudio) {
+        btn.style.transform = 'scale(1.15)';
+        btn.style.boxShadow = '0 0 25px rgba(255,118,117,0.9)';
+        status.innerHTML = '🔴 <span style="color:#FF7675;">Enregistrement en cours...</span> (Cliquez pour terminer)';
+      } else {
+        btn.style.transform = 'scale(1)';
+        btn.style.boxShadow = '0 4px 15px rgba(255,118,117,0.4)';
+        status.innerHTML = '✅ Enregistrement terminé (1:45 sec sauvegardé)';
+      }
+    }
+
+    function updateLivePreview() {
+      const title = document.getElementById('pub-title')?.value || "Titre de votre histoire";
+      const category = document.getElementById('pub-category')?.value || "Conte & Légende";
+      const excerpt = document.getElementById('pub-excerpt')?.value || "Accroche de votre histoire qui s'affichera dans le fil d'actualités...";
+      const isPremium = document.getElementById('pub-is-premium')?.checked || false;
+      const price = document.getElementById('pub-price')?.value || 500;
+
+      const container = document.getElementById('live-preview-card');
+      if (!container) return;
+
+      container.innerHTML = `
+        <div class="post-header">
+          <div class="author-info-box">
+            <div class="user-avatar-round" style="background:#134E5E;">BH</div>
+            <div>
+              <div class="author-name">Ben HOUNSA <span style="color:#6C5CE7;">✓</span></div>
+              <div class="author-sub">@benhounsa · <strong style="color:#A29BFE;">${selectedFormatLabel}</strong></div>
+            </div>
+          </div>
+          ${isPremium 
+            ? `<span class="tag-premium badge-price-tag">🔒 ${price} FCFA</span>` 
+            : `<span class="tag-free badge-price-tag">Gratuit</span>`}
+        </div>
+        <div class="post-cover-banner" style="background:${selectedCoverGradient}; height:130px;">
+          <div class="post-cover-overlay"></div>
+          <h3 class="post-cover-title" style="font-size:15px;">${title}</h3>
+        </div>
+        <div class="post-body" style="padding:10px 14px; font-size:12px;"><p>${excerpt}</p></div>
+        <div class="post-cta-container" style="padding-bottom:10px;">
+          <button class="btn-cta-pro btn-violet-cta" style="font-size:10px; padding:5px 12px;">📖 Découvrir le récit complet</button>
+        </div>
+      `;
+    }
+
+    function handlePublishSubmit() {
+      const title = document.getElementById('pub-title').value;
+      const category = document.getElementById('pub-category').value;
+      const excerpt = document.getElementById('pub-excerpt').value;
+      const textContent = document.getElementById('pub-text').value;
+      const isPremium = document.getElementById('pub-is-premium').checked;
+      const price = Number(document.getElementById('pub-price').value);
+
+      if (!title || title.trim() === '') {
+        alert('Veuillez saisir un titre pour votre histoire.');
+        goToCreateStep(1);
+        return;
+      }
+
+      const newStory = {
+        id: 'story-' + Date.now(),
+        title: title,
+        author: "Ben HOUNSA",
+        handle: "@benhounsa",
+        avatar: "BH",
+        avatarBg: "#134E5E",
+        category: category,
+        format: selectedFormat,
+        formatLabel: selectedFormatLabel,
+        coverGradient: selectedCoverGradient,
+        isPremium: isPremium,
+        priceFCFA: isPremium ? price : 0,
+        likes: 1,
+        comments: 0,
+        excerpt: excerpt || (textContent ? textContent.substring(0, 120) + '...' : 'Découvrez ce nouveau récit sur BenSo.'),
+        content: textContent || excerpt || "Bienvenue dans ce récit sur BenSo."
+      };
+
+      stories.unshift(newStory);
+
+      // Reset Form fields
+      document.getElementById('pub-title').value = '';
+      document.getElementById('pub-excerpt').value = '';
+      document.getElementById('pub-text').value = '';
+
+      closeModal('modal-publish');
+      renderFeed();
+      if (document.getElementById('view-profile') && !document.getElementById('view-profile').classList.contains('hidden')) {
+        renderProfileWorks();
+      }
+      
+      alert(`✨ Félicitations ! Votre récit "${title}" a été publié avec succès sur BenSo !`);
+    }
+
+    function toggleLike(btn, storyId) {
+      const story = stories.find(s => s.id === storyId);
+      story.likes++;
+      btn.innerHTML = `❤️ ${story.likes}`;
+    }
+
+    function renderLibrary() {
+      const container = document.getElementById('library-list');
+      document.getElementById('library-count').innerText = `${unlockedIds.length} œuvre(s) débloquée(s)`;
+      container.innerHTML = '';
+      if (unlockedIds.length === 0) {
+        container.innerHTML = `<p style="color:var(--text-sub);font-size:12px;text-align:center;padding:16px;">Aucune œuvre débloquée dans votre bibliothèque.</p>`;
+        return;
+      }
+      stories.filter(s => unlockedIds.includes(s.id)).forEach(story => {
+        const item = document.createElement('div');
+        item.className = "post-card";
+        item.style.padding = "12px";
+        item.style.cursor = "pointer";
+        item.onclick = () => openReader(story.id);
+        item.innerHTML = `
+          <h4 style="font-weight:800;color:#FFF;font-size:13px;">${story.title}</h4>
+          <p style="font-size:11px;color:#2ECC71;margin-top:2px;">✓ Accès Débloqué · Par ${story.author}</p>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function filterPosts() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const container = document.getElementById('feed-stream');
+      container.innerHTML = '';
+      stories.filter(s => s.title.toLowerCase().includes(q) || s.author.toLowerCase().includes(q)).forEach(story => {
+        const isUnlocked = unlockedIds.includes(story.id);
+        const card = document.createElement('article');
+        card.className = "post-card";
+        card.innerHTML = `
+          <div class="post-header">
+            <div class="author-info-box">
+              <div class="user-avatar-xs" style="background:${story.avatarBg}">${story.avatar}</div>
+              <div><div class="author-name">${story.author}</div><div class="author-sub">${story.category}</div></div>
+            </div>
+          </div>
+          <div class="post-body"><h3 style="color:#FFF;font-size:15px;font-weight:800;">${story.title}</h3><p style="margin-top:4px;">${story.excerpt}</p></div>
+          <div class="post-cta-container">
+            <button onclick="openReader('${story.id}')" class="btn-cta-read btn-violet-cta">📖 Lire l'œuvre</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // Init
+    renderFeed();
+    renderExploreFeed();
+    renderLibrary();
+  </script>
+</body>
+</html>

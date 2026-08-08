@@ -1,0 +1,108 @@
+[
+  {
+    "id": "comm-1786146755522",
+    "storyId": "story-1",
+    "author": {
+      "name": "Vous (Lecteur BenSo)",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true
+    },
+    "text": "Great",
+    "createdAt": "2026-08-07T23:52:35.522Z",
+    "likesCount": 0,
+    "isLiked": false,
+    "parentId": null,
+    "replies": []
+  },
+  {
+    "id": "comm-1786146413480",
+    "storyId": "story-1",
+    "author": {
+      "name": "Vous (Lecteur BenSo)",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true
+    },
+    "text": "Fine",
+    "createdAt": "2026-08-07T23:46:53.480Z",
+    "likesCount": 0,
+    "isLiked": false,
+    "parentId": null,
+    "replies": []
+  },
+  {
+    "id": "comm-1786146368673",
+    "storyId": "story-1",
+    "author": {
+      "name": "Vous (Lecteur BenSo)",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true
+    },
+    "text": "C'est vraiment cool",
+    "createdAt": "2026-08-07T23:46:08.673Z",
+    "likesCount": 0,
+    "isLiked": false,
+    "parentId": null,
+    "replies": []
+  },
+  {
+    "id": "comm-1",
+    "storyId": "story-1",
+    "author": {
+      "name": "Yao Kouassi",
+      "avatar": "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true
+    },
+    "text": "Magnifique conte ! La plume d'Amina nous transporte directement au cœur du village.",
+    "createdAt": "2026-08-07T22:45:59.019Z",
+    "likesCount": 12,
+    "isLiked": false,
+    "parentId": null,
+    "replies": [
+      {
+        "id": "comm-1-reply-1",
+        "storyId": "story-1",
+        "author": {
+          "name": "Amina Kouyaté",
+          "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+          "isVerified": true
+        },
+        "text": "Merci beaucoup Yao ! Très heureuse que l'histoire vous ait touché 🙏🏿✨",
+        "createdAt": "2026-08-07T23:15:59.019Z",
+        "likesCount": 5,
+        "isLiked": true,
+        "parentId": "comm-1"
+      }
+    ]
+  },
+  {
+    "id": "comm-2",
+    "storyId": "story-1",
+    "author": {
+      "name": "Sékou Traoré",
+      "avatar": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=150&q=80",
+      "isVerified": false
+    },
+    "text": "Captivant du début à la fin. J'attends le chapitre 2 avec impatience !",
+    "createdAt": "2026-08-07T21:45:59.019Z",
+    "likesCount": 4,
+    "isLiked": false,
+    "parentId": null,
+    "replies": [
+      {
+        "id": "comm-1786146394426",
+        "storyId": "story-1",
+        "author": {
+          "name": "Vous (Lecteur BenSo)",
+          "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
+          "isVerified": true
+        },
+        "text": "Great !",
+        "createdAt": "2026-08-07T23:46:34.426Z",
+        "likesCount": 0,
+        "isLiked": false,
+        "parentId": "comm-2",
+        "replies": []
+      }
+    ]
+  }
+]
