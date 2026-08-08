@@ -12,6 +12,8 @@ interface HeaderProps {
   activeTab?: string;
   discoverSubTab?: string;
   onDiscoverSubTabChange?: (subTab: string) => void;
+  onProfileClick?: () => void;
+  onNotificationClick?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -23,6 +25,8 @@ export const Header: React.FC<HeaderProps> = ({
   activeTab = 'home',
   discoverSubTab = 'formats',
   onDiscoverSubTabChange,
+  onProfileClick,
+  onNotificationClick,
 }) => {
   const homeFilters = [
     { id: 'all', label: 'Tout' },
@@ -63,12 +67,13 @@ export const Header: React.FC<HeaderProps> = ({
             />
           </div>
 
-          {/* Action Buttons: Notifications & Profile */}
+          {/* Action Buttons: Notifications Bell (Top Right) */}
           <div className="flex items-center gap-2 shrink-0">
             <button 
-              onClick={() => alert("Notifications BenSo : 3 nouveaux messages et réactions sur vos œuvres.")}
+              onClick={onNotificationClick}
               className="relative p-2 rounded-xl bg-[#16122B] hover:bg-[#1C1738] text-gray-300 hover:text-white border border-indigo-900/40 transition-all cursor-pointer shadow-sm active:scale-95"
               aria-label="Notifications"
+              title="Centre de Notifications"
             >
               <BellIcon size={18} />
               {unreadNotifications > 0 && (
@@ -77,15 +82,6 @@ export const Header: React.FC<HeaderProps> = ({
                 </span>
               )}
             </button>
-
-            {/* User Profile Avatar */}
-            <div className="w-8 h-8 md:w-9 md:h-9 rounded-xl bg-gradient-to-tr from-indigo-500 to-rose-500 p-0.5 shadow-md shadow-indigo-950/60 cursor-pointer transition-transform hover:scale-105">
-              <img
-                src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
-                alt="Profil"
-                className="w-full h-full object-cover rounded-[10px]"
-              />
-            </div>
           </div>
         </div>
 

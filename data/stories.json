@@ -1,5 +1,30 @@
 [
   {
+    "title": "eeee",
+    "excerpt": "eieoeieoe",
+    "fullContent": "eieoeieoe",
+    "category": "Conte & Légende",
+    "format": "image",
+    "isPremium": true,
+    "priceFCFA": 200,
+    "coverImage": "blob:http://localhost:3000/28130d9f-ed3b-44df-9b25-64c339e660a8",
+    "coverEffect": "zoom",
+    "mediaUrl": "/uploads/ChatGPT_Image_23_juil__2026__08_56_41_1786184509619.png",
+    "author": {
+      "name": "Auteur BenSo",
+      "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true,
+      "handle": "auteur_benso"
+    },
+    "id": "story-1786184509673",
+    "likesCount": 1,
+    "commentsCount": 0,
+    "sharesCount": 0,
+    "readsCount": 1,
+    "createdAt": "2026-08-08T10:21:49.674Z",
+    "isLiked": true
+  },
+  {
     "id": "story-1",
     "title": "L'Ombre du Baobab",
     "author": {
@@ -21,7 +46,7 @@
     "sharesCount": 15,
     "readsCount": 1250,
     "isLiked": true,
-    "isBookmarked": false,
+    "isBookmarked": true,
     "createdAt": "2026-08-05T22:30:32.734Z"
   },
   {

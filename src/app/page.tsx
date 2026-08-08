@@ -10,6 +10,9 @@ import { CreateStoryModal } from '@/components/ui/CreateStoryModal';
 import { CommentsModal } from '@/components/ui/CommentsModal';
 import { ShareModal } from '@/components/ui/ShareModal';
 import { MessagesView } from '@/components/ui/MessagesView';
+import { LibraryView } from '@/components/ui/LibraryView';
+import { ProfileView } from '@/components/ui/ProfileView';
+import { NotificationsModal } from '@/components/ui/NotificationsModal';
 import { SparklesIcon, VerifiedIcon, StarIcon, LockIcon, BookOpenIcon, HeartIcon } from '@/components/ui/Icons';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -94,6 +97,8 @@ export default function Home() {
   const [selectedStoryForComments, setSelectedStoryForComments] = useState<StoryItem | null>(null);
   const [selectedStoryForShare, setSelectedStoryForShare] = useState<StoryItem | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+  const [isNotificationsModalOpen, setIsNotificationsModalOpen] = useState<boolean>(false);
+  const [isMobileChatOpen, setIsMobileChatOpen] = useState<boolean>(false);
   const [unlockedStoryIds, setUnlockedStoryIds] = useState<string[]>([]);
 
   const fetchStories = async () => {
@@ -131,19 +136,23 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0B0914] text-gray-100 flex flex-col md:flex-row pb-28 md:pb-8">
+    <div className={`min-h-screen bg-[#0B0914] text-gray-100 flex flex-col md:flex-row ${activeTab === 'messages' ? 'pb-16 md:pb-0' : 'pb-28 md:pb-8'}`}>
       {/* Navigation (Sidebar desktop + Bottom bar mobile) */}
       <Navbar
         activeTab={activeTab}
-        onTabChange={(tab) => setActiveTab(tab)}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          setIsMobileChatOpen(false);
+        }}
         onOpenCreateModal={() => setIsCreateModalOpen(true)}
+        isMobileChatOpen={isMobileChatOpen}
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 md:ml-64 min-w-0 flex flex-col">
+      <div className={`flex-1 md:ml-64 min-w-0 flex flex-col ${activeTab === 'messages' ? 'relative z-[100]' : ''}`}>
         
-        {/* Sticky Header - Rendered only on Home tab */}
-        {activeTab === 'home' && (
+        {/* Sticky Header - Rendered on Home and Discover tabs */}
+        {(activeTab === 'home' || activeTab === 'discover') && (
           <Header
             searchQuery={searchQuery}
             onSearchChange={setSearchQuery}
@@ -152,6 +161,8 @@ export default function Home() {
             activeTab={activeTab}
             discoverSubTab={discoverSubTab}
             onDiscoverSubTabChange={setDiscoverSubTab}
+            onProfileClick={() => setActiveTab('profile')}
+            onNotificationClick={() => setIsNotificationsModalOpen(true)}
           />
         )}
 
@@ -289,98 +300,38 @@ export default function Home() {
 
         {/* Tab 3: Messages & Chat Inbox */}
         {activeTab === 'messages' && (
-          <main className="w-full flex-1 flex flex-col items-center justify-center p-1 sm:p-4 pb-16 md:pb-0">
-            <MessagesView />
+          <main className="w-full flex-1 flex flex-col min-h-0 h-[calc(100vh-64px)] md:h-screen overflow-hidden relative z-[100]">
+            <MessagesView onMobileChatToggle={setIsMobileChatOpen} />
           </main>
         )}
 
         {/* Tab 4: Personal Library */}
         {activeTab === 'library' && (
-          <main className="p-4 md:p-8 max-w-4xl mx-auto w-full space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-bold text-white">Ma Bibliothèque</h2>
-              <Badge variant="free">{unlockedStoryIds.length} œuvre(s) débloquée(s)</Badge>
-            </div>
-
-            {unlockedStoryIds.length === 0 ? (
-              <div className="py-12 text-center bg-[#151226] rounded-3xl border border-indigo-900/30 p-8 space-y-3">
-                <BookOpenIcon size={40} className="mx-auto text-indigo-400" />
-                <h3 className="text-lg font-bold text-white">Votre bibliothèque est vide</h3>
-                <p className="text-gray-400 text-xs max-w-sm mx-auto">
-                  Achetez une œuvre via Mobile Money ou sauvegardez une histoire gratuite pour la retrouver ici à tout moment.
-                </p>
-                <Button variant="coral" size="sm" onClick={() => setActiveTab('home')}>
-                  Découvrir les sables de récits
-                </Button>
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {stories.filter(s => unlockedStoryIds.includes(s.id)).map(story => (
-                  <div 
-                    key={story.id} 
-                    onClick={() => setSelectedStoryForDetail(story)}
-                    className="bg-[#151226] p-4 rounded-2xl border border-indigo-900/40 flex items-center gap-3 cursor-pointer hover:border-indigo-500/50"
-                  >
-                    <img src={story.coverImage} alt={story.title} className="w-16 h-20 rounded-xl object-cover" />
-                    <div>
-                      <h4 className="font-bold text-sm text-white">{story.title}</h4>
-                      <p className="text-xs text-indigo-300">{story.author.name}</p>
-                      <span className="text-[10px] text-emerald-400 font-bold block mt-2">✓ Débloqué & Accessible</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
+          <main className="w-full flex-1 min-w-0">
+            <LibraryView
+              stories={stories}
+              unlockedStoryIds={unlockedStoryIds}
+              onOpenStoryDetail={(story) => setSelectedStoryForDetail(story)}
+              onOpenPaymentModal={(story) => setSelectedStoryForPayment(story)}
+              onOpenComments={(story) => setSelectedStoryForComments(story)}
+              onOpenShare={(story) => setSelectedStoryForShare(story)}
+              onNavigateHome={() => setActiveTab('home')}
+            />
           </main>
         )}
 
-        {/* Tab 4: Creator / User Profile */}
+        {/* Tab 5: Profile & Personal Library */}
         {activeTab === 'profile' && (
-          <main className="p-4 md:p-8 max-w-4xl mx-auto w-full space-y-6">
-            <div className="bg-[#151226] p-6 rounded-3xl border border-indigo-900/40 space-y-6">
-              <div className="flex items-center gap-4">
-                <img
-                  src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80"
-                  alt="Ben HOUNSA"
-                  className="w-20 h-20 rounded-3xl object-cover ring-4 ring-indigo-500/30"
-                />
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-xl font-bold text-white">Ben HOUNSA</h2>
-                    <VerifiedIcon size={20} />
-                  </div>
-                  <p className="text-xs text-indigo-300">@benhounsa • Promoteur & Auteur</p>
-                  <p className="text-xs text-gray-400 mt-1">Cotonou, Bénin 🇧🇯</p>
-                </div>
-              </div>
-
-              {/* Creator Financials Widget */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 p-4 rounded-2xl bg-[#1A162F] border border-indigo-900/30 text-center">
-                <div>
-                  <span className="text-xs text-gray-400 block">Solde Disponible</span>
-                  <span className="text-base font-extrabold text-emerald-400">14 500 F CFA</span>
-                </div>
-                <div>
-                  <span className="text-xs text-gray-400 block">Ventes Totales</span>
-                  <span className="text-base font-extrabold text-amber-300">29 Ventes</span>
-                </div>
-                <div className="col-span-2 sm:col-span-1">
-                  <span className="text-xs text-gray-400 block">Commission BenSo</span>
-                  <span className="text-base font-extrabold text-indigo-300">15 %</span>
-                </div>
-              </div>
-
-              <div className="flex gap-2">
-                <Button 
-                  variant="coral" 
-                  size="md" 
-                  fullWidth 
-                  onClick={() => alert("Demande de retrait vers le numéro Mobile Money +229 97XX XX XX initiée (14 500 F CFA).")}
-                >
-                  Retirer mes gains (Mobile Money)
-                </Button>
-              </div>
-            </div>
+          <main className="w-full flex-1 min-w-0">
+            <ProfileView
+              stories={stories}
+              unlockedStoryIds={unlockedStoryIds}
+              onOpenStoryDetail={(story) => setSelectedStoryForDetail(story)}
+              onOpenPaymentModal={(story) => setSelectedStoryForPayment(story)}
+              onOpenComments={(story) => setSelectedStoryForComments(story)}
+              onOpenShare={(story) => setSelectedStoryForShare(story)}
+              onNavigateHome={() => setActiveTab('home')}
+            />
           </main>
         )}
 
@@ -429,6 +380,12 @@ export default function Home() {
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
         onStoryCreated={handleCreateStory}
+      />
+
+      {/* Notifications Modal Drawer */}
+      <NotificationsModal
+        isOpen={isNotificationsModalOpen}
+        onClose={() => setIsNotificationsModalOpen(false)}
       />
 
     </div>

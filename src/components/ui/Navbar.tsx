@@ -25,21 +25,24 @@ interface NavbarProps {
   activeTab: string;
   onTabChange: (tab: string) => void;
   onOpenCreateModal?: () => void;
+  isMobileChatOpen?: boolean;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenCreateModal }) => {
+export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenCreateModal, isMobileChatOpen = false }) => {
   const navItems: NavItem[] = [
     { id: 'home', label: 'Accueil', icon: <HomeIcon size={22} /> },
     { id: 'discover', label: 'Découvrir', icon: <CompassIcon size={22} /> },
-    { id: 'create', label: 'Créer', icon: <PlusCircleIcon size={26} />, isAction: true },
+    { id: 'create', label: 'Publier', icon: <PlusCircleIcon size={26} />, isAction: true },
     { id: 'messages', label: 'Messages', icon: <MessageIcon size={22} /> },
-    { id: 'library', label: 'Bibliothèque', icon: <LibraryIcon size={22} /> },
+    { id: 'profile', label: 'Profil', icon: <UserIcon size={22} /> },
   ];
 
   return (
     <>
       {/* Mobile Bottom Navigation Bar */}
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#120F24]/90 backdrop-blur-xl border-t border-indigo-950/60 px-4 py-2">
+      <nav className={`md:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#120F24]/90 backdrop-blur-xl border-t border-indigo-950/60 px-2 py-2 ${
+        isMobileChatOpen ? 'hidden' : 'block'
+      }`}>
         <div className="flex items-center justify-around max-w-md mx-auto relative">
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
@@ -66,12 +69,15 @@ export const Navbar: React.FC<NavbarProps> = ({ activeTab, onTabChange, onOpenCr
               <button
                 key={item.id}
                 onClick={() => onTabChange(item.id)}
-                className={`flex flex-col items-center py-1 px-3 rounded-xl transition-all duration-200 ${
+                className={`flex flex-col items-center py-1 px-2.5 rounded-xl transition-all duration-200 ${
                   isActive ? 'text-indigo-400 font-semibold' : 'text-gray-400 hover:text-gray-200'
                 }`}
               >
                 <div className="relative">
                   {item.icon}
+                  {item.id === 'notifications' && (
+                    <span className="absolute -top-1 -right-1 w-2.5 h-2.5 rounded-full bg-rose-500 ring-2 ring-[#120F24] animate-pulse" />
+                  )}
                   {isActive && (
                     <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 rounded-full bg-indigo-500 shadow-sm shadow-indigo-400" />
                   )}
