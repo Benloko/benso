@@ -13,6 +13,7 @@ import { MessagesView } from '@/components/ui/MessagesView';
 import { LibraryView } from '@/components/ui/LibraryView';
 import { ProfileView } from '@/components/ui/ProfileView';
 import { NotificationsModal } from '@/components/ui/NotificationsModal';
+import { UserProfileModal, UserProfileData } from '@/components/ui/UserProfileModal';
 import { SparklesIcon, VerifiedIcon, StarIcon, LockIcon, BookOpenIcon, HeartIcon } from '@/components/ui/Icons';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -96,10 +97,23 @@ export default function Home() {
   const [selectedStoryForPayment, setSelectedStoryForPayment] = useState<StoryItem | null>(null);
   const [selectedStoryForComments, setSelectedStoryForComments] = useState<StoryItem | null>(null);
   const [selectedStoryForShare, setSelectedStoryForShare] = useState<StoryItem | null>(null);
+  const [selectedUserProfile, setSelectedUserProfile] = useState<UserProfileData | null>(null);
+  const [activeChatTargetUser, setActiveChatTargetUser] = useState<string | null>(null);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
   const [isNotificationsModalOpen, setIsNotificationsModalOpen] = useState<boolean>(false);
   const [isMobileChatOpen, setIsMobileChatOpen] = useState<boolean>(false);
   const [unlockedStoryIds, setUnlockedStoryIds] = useState<string[]>([]);
+
+  const handleOpenUserProfile = (user: { name: string; avatar: string; handle?: string; isVerified?: boolean; isCreator?: boolean; role?: string }) => {
+    setSelectedUserProfile({
+      name: user.name,
+      avatar: user.avatar,
+      handle: user.handle,
+      isVerified: user.isVerified,
+      isCreator: user.isCreator,
+      role: user.role,
+    });
+  };
 
   const fetchStories = async () => {
     try {
@@ -184,6 +198,7 @@ export default function Home() {
                     onOpenPaymentModal={(story) => setSelectedStoryForPayment(story)}
                     onOpenComments={(story) => setSelectedStoryForComments(story)}
                     onOpenShare={(story) => setSelectedStoryForShare(story)}
+                    onOpenUserProfile={handleOpenUserProfile}
                     onStoryUpdated={() => fetchStories()}
                   />
                 ))
@@ -301,7 +316,22 @@ export default function Home() {
         {/* Tab 3: Messages & Chat Inbox */}
         {activeTab === 'messages' && (
           <main className="w-full flex-1 flex flex-col min-h-0 h-[calc(100vh-64px)] md:h-screen overflow-hidden relative z-[100]">
-            <MessagesView onMobileChatToggle={setIsMobileChatOpen} />
+            <MessagesView 
+              onMobileChatToggle={setIsMobileChatOpen} 
+              onOpenUserProfile={handleOpenUserProfile}
+              targetUserName={activeChatTargetUser}
+              onBackNavigation={() => {
+                if (activeChatTargetUser) {
+                  const targetName = activeChatTargetUser;
+                  setActiveChatTargetUser(null);
+                  handleOpenUserProfile({
+                    name: targetName,
+                    avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+                    role: 'Auteur BenSo',
+                  });
+                }
+              }}
+            />
           </main>
         )}
 
@@ -356,6 +386,7 @@ export default function Home() {
         }}
         onOpenShare={(story) => setSelectedStoryForShare(story)}
         onOpenComments={(story) => setSelectedStoryForComments(story)}
+        onOpenUserProfile={handleOpenUserProfile}
         isUnlocked={selectedStoryForDetail ? unlockedStoryIds.includes(selectedStoryForDetail.id) : false}
       />
 
@@ -365,6 +396,7 @@ export default function Home() {
         isOpen={!!selectedStoryForComments}
         onClose={() => setSelectedStoryForComments(null)}
         onCommentAdded={() => fetchStories()}
+        onOpenUserProfile={handleOpenUserProfile}
       />
 
       {/* Share Modal */}
@@ -386,6 +418,24 @@ export default function Home() {
       <NotificationsModal
         isOpen={isNotificationsModalOpen}
         onClose={() => setIsNotificationsModalOpen(false)}
+      />
+
+      {/* Other User Profile View Modal */}
+      <UserProfileModal
+        user={selectedUserProfile}
+        isOpen={!!selectedUserProfile}
+        stories={stories}
+        unlockedStoryIds={unlockedStoryIds}
+        onClose={() => setSelectedUserProfile(null)}
+        onOpenStoryDetail={(story) => setSelectedStoryForDetail(story)}
+        onOpenPaymentModal={(story) => setSelectedStoryForPayment(story)}
+        onOpenComments={(story) => setSelectedStoryForComments(story)}
+        onOpenShare={(story) => setSelectedStoryForShare(story)}
+        onOpenMessage={(userName) => {
+          setSelectedUserProfile(null);
+          setActiveChatTargetUser(userName);
+          setActiveTab('messages');
+        }}
       />
 
     </div>

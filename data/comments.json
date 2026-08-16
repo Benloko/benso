@@ -1,5 +1,20 @@
 [
   {
+    "id": "comm-1786296952113",
+    "storyId": "story-1786296603057",
+    "author": {
+      "name": "Vous (Lecteur BenSo)",
+      "avatar": "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=150&q=80",
+      "isVerified": true
+    },
+    "text": "great",
+    "createdAt": "2026-08-09T17:35:52.113Z",
+    "likesCount": 0,
+    "isLiked": false,
+    "parentId": null,
+    "replies": []
+  },
+  {
     "id": "comm-1786146755522",
     "storyId": "story-1",
     "author": {

@@ -50,6 +50,7 @@ interface StoryCardProps {
   onOpenPaymentModal: (story: StoryItem) => void;
   onOpenComments?: (story: StoryItem) => void;
   onOpenShare?: (story: StoryItem) => void;
+  onOpenUserProfile?: (user: { name: string; avatar: string; handle?: string; isVerified?: boolean }) => void;
   onStoryUpdated?: (updatedStory: StoryItem) => void;
 }
 
@@ -59,6 +60,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
   onOpenPaymentModal,
   onOpenComments,
   onOpenShare,
+  onOpenUserProfile,
   onStoryUpdated,
 }) => {
   const [liked, setLiked] = useState(story.isLiked || false);
@@ -124,12 +126,19 @@ export const StoryCard: React.FC<StoryCardProps> = ({
 
       {/* Author Header (Name + PublishedAt - Padlock status top right) */}
       <div className="flex items-center justify-between z-10">
-        <div className="flex items-center gap-3">
+        <div 
+          onClick={(e) => {
+            e.stopPropagation();
+            onOpenUserProfile?.(story.author);
+          }}
+          className="flex items-center gap-3 group/author cursor-pointer hover:opacity-90 transition-opacity"
+          title={`Voir le profil de ${story.author.name}`}
+        >
           <div className="relative">
             <img
               src={story.author.avatar}
               alt={story.author.name}
-              className="w-10 h-10 rounded-2xl object-cover ring-2 ring-indigo-500/30"
+              className="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-500/30 group-hover/author:ring-rose-500/60 transition-all"
             />
             {story.author.isVerified && (
               <span className="absolute -bottom-1 -right-1">
@@ -138,7 +147,7 @@ export const StoryCard: React.FC<StoryCardProps> = ({
             )}
           </div>
           <div>
-            <h4 className="text-sm font-bold text-gray-100 group-hover:text-indigo-300 transition-colors">
+            <h4 className="text-sm font-bold text-gray-100 group-hover/author:text-rose-300 transition-colors">
               {story.author.name}
             </h4>
             <p className="text-[11px] text-gray-400 font-medium">

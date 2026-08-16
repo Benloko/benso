@@ -19,6 +19,7 @@ interface StoryDetailModalProps {
   onOpenPaymentModal: (story: StoryItem) => void;
   onOpenShare?: (story: StoryItem) => void;
   onOpenComments?: (story: StoryItem) => void;
+  onOpenUserProfile?: (user: { name: string; avatar: string; handle?: string; isVerified?: boolean }) => void;
   isUnlocked?: boolean;
 }
 
@@ -29,6 +30,7 @@ export const StoryDetailModal: React.FC<StoryDetailModalProps> = ({
   onOpenPaymentModal,
   onOpenShare,
   onOpenComments,
+  onOpenUserProfile,
   isUnlocked = false,
 }) => {
   const [isLiked, setIsLiked] = useState(false);
@@ -269,13 +271,20 @@ export const StoryDetailModal: React.FC<StoryDetailModalProps> = ({
                 <h1 className="text-xl sm:text-2xl font-black text-white leading-tight tracking-tight">
                   {story.title}
                 </h1>
-                <div className="flex items-center gap-2 text-xs text-indigo-300 font-medium">
+                <div 
+                  onClick={() => {
+                    onClose();
+                    onOpenUserProfile?.(story.author);
+                  }}
+                  className="flex items-center gap-2 text-xs text-indigo-300 font-medium cursor-pointer hover:opacity-90 transition-opacity"
+                  title={`Voir le profil de ${story.author.name}`}
+                >
                   <img
                     src={story.author.avatar}
                     alt={story.author.name}
                     className="w-5 h-5 rounded-full object-cover ring-1 ring-indigo-400"
                   />
-                  <span>Par <strong className="text-white">{story.author.name}</strong></span>
+                  <span>Par <strong className="text-white hover:underline">{story.author.name}</strong></span>
                   {story.author.isVerified && <VerifiedIcon size={14} />}
                 </div>
               </div>

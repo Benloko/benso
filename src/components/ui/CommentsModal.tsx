@@ -25,6 +25,7 @@ interface CommentsModalProps {
   isOpen: boolean;
   onClose: () => void;
   onCommentAdded?: (updatedStory: StoryItem) => void;
+  onOpenUserProfile?: (user: { name: string; avatar: string; handle?: string; isVerified?: boolean; isCreator?: boolean; role?: string }) => void;
 }
 
 export const CommentsModal: React.FC<CommentsModalProps> = ({
@@ -32,6 +33,7 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
   isOpen,
   onClose,
   onCommentAdded,
+  onOpenUserProfile,
 }) => {
   const [comments, setComments] = useState<CommentItem[]>([]);
   const [loading, setLoading] = useState(false);
@@ -227,12 +229,35 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
                   <img
                     src={comm.author.avatar}
                     alt={comm.author.name}
-                    className="w-9 h-9 rounded-2xl object-cover ring-2 ring-indigo-500/30 shrink-0 mt-0.5 shadow-md"
+                    onClick={() => {
+                      onClose();
+                      onOpenUserProfile?.({
+                        name: comm.author.name,
+                        avatar: comm.author.avatar,
+                        isVerified: comm.author.isVerified,
+                        isCreator: comm.author.isVerified !== false,
+                        role: comm.author.isVerified !== false ? 'Auteur & Créateur' : 'Membre Lecteur',
+                      });
+                    }}
+                    className="w-9 h-9 rounded-2xl object-cover ring-2 ring-indigo-500/30 shrink-0 mt-0.5 shadow-md cursor-pointer hover:scale-105 transition-transform"
+                    title={`Voir le profil de ${comm.author.name}`}
                   />
                   <div className="flex-1 space-y-1">
                     <div className="bg-white/[0.04] hover:bg-white/[0.06] transition-colors p-3.5 rounded-2xl border border-white/10 space-y-1">
                       <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-1.5">
+                        <div 
+                          onClick={() => {
+                            onClose();
+                            onOpenUserProfile?.({
+                              name: comm.author.name,
+                              avatar: comm.author.avatar,
+                              isVerified: comm.author.isVerified,
+                              isCreator: comm.author.isVerified !== false,
+                              role: comm.author.isVerified !== false ? 'Auteur & Créateur' : 'Membre Lecteur',
+                            });
+                          }}
+                          className="flex items-center gap-1.5 cursor-pointer hover:underline"
+                        >
                           <span className="font-black text-xs text-white">{comm.author.name}</span>
                           {comm.author.isVerified && <VerifiedIcon size={14} />}
                         </div>
@@ -274,12 +299,35 @@ export const CommentsModal: React.FC<CommentsModalProps> = ({
                         <img
                           src={reply.author.avatar}
                           alt={reply.author.name}
-                          className="w-7 h-7 rounded-xl object-cover ring-1 ring-indigo-500/30 shrink-0 mt-0.5 shadow-sm"
+                          onClick={() => {
+                            onClose();
+                            onOpenUserProfile?.({
+                              name: reply.author.name,
+                              avatar: reply.author.avatar,
+                              isVerified: reply.author.isVerified,
+                              isCreator: reply.author.isVerified !== false,
+                              role: reply.author.isVerified !== false ? 'Auteur & Créateur' : 'Membre Lecteur',
+                            });
+                          }}
+                          className="w-7 h-7 rounded-xl object-cover ring-1 ring-indigo-500/30 shrink-0 mt-0.5 shadow-sm cursor-pointer hover:scale-105 transition-transform"
+                          title={`Voir le profil de ${reply.author.name}`}
                         />
                         <div className="flex-1 space-y-1">
                           <div className="bg-white/[0.05] p-3 rounded-2xl border border-white/10 space-y-0.5">
                             <div className="flex items-center justify-between">
-                              <div className="flex items-center gap-1">
+                              <div 
+                                onClick={() => {
+                                  onClose();
+                                  onOpenUserProfile?.({
+                                    name: reply.author.name,
+                                    avatar: reply.author.avatar,
+                                    isVerified: reply.author.isVerified,
+                                    isCreator: reply.author.isVerified !== false,
+                                    role: reply.author.isVerified !== false ? 'Auteur & Créateur' : 'Membre Lecteur',
+                                  });
+                                }}
+                                className="flex items-center gap-1 cursor-pointer hover:underline"
+                              >
                                 <span className="font-black text-[11px] text-indigo-200">{reply.author.name}</span>
                                 {reply.author.isVerified && <VerifiedIcon size={12} />}
                               </div>

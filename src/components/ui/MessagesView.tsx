@@ -42,6 +42,9 @@ export interface ChatConversation {
 
 interface MessagesViewProps {
   onMobileChatToggle?: (isOpen: boolean) => void;
+  onOpenUserProfile?: (user: { name: string; avatar: string; handle?: string; isVerified?: boolean; role?: string }) => void;
+  targetUserName?: string | null;
+  onBackNavigation?: () => void;
 }
 
 const EMOJI_CATEGORIES = [
@@ -172,10 +175,54 @@ const QUICK_AUTHORS_STORIES = [
   { id: 'auth-5', name: 'Koffi S.', avatar: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=150&q=80', isOnline: true, convId: null },
 ];
 
-export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }) => {
+export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle, onOpenUserProfile, targetUserName, onBackNavigation }) => {
   const [conversations, setConversations] = useState<ChatConversation[]>(INITIAL_CONVERSATIONS);
   const [selectedConvId, setSelectedConvId] = useState<string>('conv-1');
   const [activeMobileView, setActiveMobileView] = useState<'list' | 'chat'>('list');
+
+  // Handle direct navigation to a target user's chat conversation
+  useEffect(() => {
+    if (targetUserName) {
+      const found = conversations.find(
+        (c) => c.user.name.toLowerCase().includes(targetUserName.toLowerCase()) ||
+               (c.user.handle && c.user.handle.toLowerCase().includes(targetUserName.toLowerCase()))
+      );
+
+      if (found) {
+        setSelectedConvId(found.id);
+        setActiveMobileView('chat');
+        onMobileChatToggle?.(true);
+      } else {
+        const newConvId = `conv-${Date.now()}`;
+        const newConv: ChatConversation = {
+          id: newConvId,
+          user: {
+            name: targetUserName,
+            avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80',
+            isVerified: true,
+            role: 'Auteur BenSo',
+            isOnline: true,
+          },
+          lastMessage: 'Discussion démarrée',
+          lastMessageTime: 'À l\'instant',
+          unreadCount: 0,
+          isFavorite: false,
+          messages: [
+            {
+              id: `m-init-${Date.now()}`,
+              sender: 'user',
+              text: `Bonjour ! Discussion ouverte avec ${targetUserName}.`,
+              timestamp: 'À l\'instant',
+            },
+          ],
+        };
+        setConversations((prev) => [newConv, ...prev]);
+        setSelectedConvId(newConvId);
+        setActiveMobileView('chat');
+        onMobileChatToggle?.(true);
+      }
+    }
+  }, [targetUserName]);
   const [inputMessage, setInputMessage] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [activeFilterTab, setActiveFilterTab] = useState<'all' | 'unread' | 'authors' | 'favorites'>('all');
@@ -284,6 +331,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
   const handleBackToList = () => {
     setActiveMobileView('list');
     onMobileChatToggle?.(false);
+    onBackNavigation?.();
   };
 
   // Toggle Favorite Handler
@@ -753,26 +801,19 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
           {/* Main Title */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
-              <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-rose-500 via-purple-600 to-indigo-600 p-0.5 shadow-lg shadow-indigo-500/30 flex items-center justify-center">
-                <div className="w-full h-full rounded-[14px] bg-[#110D27] flex items-center justify-center text-rose-400">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-tr from-rose-500 via-purple-600 to-indigo-600 p-0.5 shadow-lg shadow-indigo-500/30 flex items-center justify-center">
+                <div className="w-full h-full rounded-full bg-[#110D27] flex items-center justify-center text-rose-400">
                   <MessageIcon size={20} />
                 </div>
               </div>
               <div>
-                <div className="flex items-center gap-2">
-                  <h2 className="font-black text-xl text-white tracking-tight">Messagerie</h2>
-                  {totalUnread > 0 && (
-                    <span className="bg-gradient-to-r from-rose-500 to-pink-600 text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full shadow-md animate-pulse">
-                      {totalUnread} non lu{totalUnread > 1 ? 's' : ''}
-                    </span>
-                  )}
-                </div>
+                <h2 className="font-black text-xl text-white tracking-tight">Messagerie</h2>
                 <p className="text-[11px] text-indigo-300/80 font-medium">Échanges en direct avec les auteurs</p>
               </div>
             </div>
           </div>
 
-          {/* Quick Active Authors Carousel (Stories Reels Style) */}
+          {/* Quick Active Authors Carousel (Stories Reels Style - ROUND AVATARS!) */}
           <div className="pt-1 pb-1 overflow-x-auto flex items-center gap-3.5 scrollbar-none">
             {QUICK_AUTHORS_STORIES.map((author) => (
               <button
@@ -785,7 +826,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                 className="flex flex-col items-center gap-1 shrink-0 group cursor-pointer"
               >
                 <div className="relative">
-                  <div className={`p-0.5 rounded-2xl transition-transform group-hover:scale-110 ${
+                  <div className={`p-0.5 rounded-full transition-transform group-hover:scale-110 ${
                     author.isOnline
                       ? 'bg-gradient-to-tr from-emerald-400 via-indigo-500 to-rose-500 shadow-md shadow-emerald-500/20'
                       : 'bg-white/10'
@@ -793,7 +834,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                     <img
                       src={author.avatar}
                       alt={author.name}
-                      className="w-11 h-11 rounded-[14px] object-cover ring-2 ring-[#0E0A24]"
+                      className="w-11 h-11 rounded-full object-cover ring-2 ring-[#0E0A24]"
                     />
                   </div>
                   {author.isOnline && (
@@ -854,8 +895,8 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
 
         </div>
 
-        {/* Conversations List Items */}
-        <div className="flex-1 overflow-y-auto p-3 space-y-2.5 scrollbar-none">
+        {/* Conversations List Items (CLEAN & ELEGANT UNCLUTTERED LIST!) */}
+        <div className="flex-1 overflow-y-auto px-2 py-1 scrollbar-none">
           {filteredConversations.length === 0 ? (
             <div className="py-12 text-center text-gray-400 space-y-2 px-4">
               <p className="text-sm font-semibold">Aucune discussion trouvée</p>
@@ -881,20 +922,25 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                 <div
                   key={conv.id}
                   onClick={() => handleSelectConv(conv.id)}
-                  className={`p-3.5 rounded-3xl border transition-all duration-200 cursor-pointer flex items-center gap-3 relative group ${
+                  className={`px-3 py-3 rounded-2xl transition-all duration-200 cursor-pointer flex items-center gap-3 relative group border-b border-white/[0.05] ${
                     isSelected
-                      ? 'bg-gradient-to-r from-indigo-600/30 via-purple-600/25 to-rose-600/20 border-indigo-500/60 shadow-xl shadow-indigo-950/50'
-                      : hasUnread
-                      ? 'bg-gradient-to-r from-rose-950/20 to-indigo-950/30 border-rose-500/40 hover:border-rose-400/60'
-                      : 'bg-white/[0.03] hover:bg-white/[0.07] border-white/5'
+                      ? 'bg-gradient-to-r from-indigo-600/30 via-purple-600/20 to-rose-600/15 border-l-4 border-l-rose-500'
+                      : 'hover:bg-white/[0.04]'
                   }`}
                 >
-                  {/* Avatar with Status Indicator */}
-                  <div className="relative shrink-0">
+                  {/* Avatar with Status Indicator (PERFECT ROUND CIRCLE!) */}
+                  <div 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onOpenUserProfile?.(conv.user);
+                    }}
+                    className="relative shrink-0 cursor-pointer group/avatar"
+                    title={`Voir le profil de ${conv.user.name}`}
+                  >
                     <img
                       src={conv.user.avatar}
                       alt={conv.user.name}
-                      className="w-12 h-12 rounded-2xl object-cover ring-2 ring-indigo-500/40 shadow-md group-hover:scale-105 transition-transform"
+                      className="w-12 h-12 rounded-full object-cover ring-2 ring-indigo-500/30 shadow-md group-hover/avatar:ring-rose-500/60 group-hover/avatar:scale-105 transition-all"
                     />
                     {conv.user.isOnline && (
                       <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-[#0E0A24] shadow-md shadow-emerald-500/50" />
@@ -902,7 +948,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                   </div>
 
                   {/* Clean Info & Last Message Snippet */}
-                  <div className="min-w-0 flex-1 space-y-1">
+                  <div className="min-w-0 flex-1 space-y-0.5">
                     <div className="flex items-center justify-between gap-1">
                       <div className="flex items-center gap-1.5 truncate">
                         <span className="font-extrabold text-sm text-white truncate group-hover:text-rose-200 transition-colors">
@@ -916,7 +962,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                     </div>
 
                     {/* Last Message Text Snippet */}
-                    <p className={`text-xs truncate font-medium ${hasUnread ? 'text-white font-bold' : 'text-gray-300/90'}`}>
+                    <p className={`text-xs truncate font-medium ${hasUnread ? 'text-white font-bold' : 'text-gray-300/80'}`}>
                       {conv.lastMessage}
                     </p>
                   </div>
@@ -924,7 +970,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                   {/* Unread Badge & Refined Sleek Favorite Star Toggle Button */}
                   <div className="shrink-0 flex items-center gap-2">
                     {hasUnread && (
-                      <span className="w-5 h-5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-black text-[10px] flex items-center justify-center shadow-lg shadow-rose-500/40 animate-bounce">
+                      <span className="w-5 h-5 rounded-full bg-gradient-to-r from-rose-500 to-pink-600 text-white font-black text-[10px] flex items-center justify-center shadow-lg shadow-rose-500/40 animate-pulse">
                         {conv.unreadCount}
                       </span>
                     )}
@@ -982,29 +1028,35 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
               </svg>
             </button>
 
-            {/* Avatar & Online Badge */}
-            <div className="relative shrink-0">
-              <img
-                src={activeConv.user.avatar}
-                alt={activeConv.user.name}
-                className="w-10 h-10 rounded-2xl object-cover ring-2 ring-indigo-500/50 shadow-md"
-              />
-              {activeConv.user.isOnline && (
-                <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-[#110D2A]" />
-              )}
-            </div>
-
-            {/* Name, Verified Badge & Online Status */}
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <h3 className="font-extrabold text-sm sm:text-base text-white truncate">{activeConv.user.name}</h3>
-                {activeConv.user.isVerified && <VerifiedIcon size={14} className="shrink-0 text-amber-400" />}
+            {/* Avatar & User Info - Click to view profile */}
+            <div 
+              onClick={() => onOpenUserProfile?.(activeConv.user)}
+              className="flex items-center gap-3 min-w-0 flex-1 cursor-pointer hover:opacity-90 transition-opacity group/chatuser"
+              title={`Voir le profil de ${activeConv.user.name}`}
+            >
+              <div className="relative shrink-0">
+                <img
+                  src={activeConv.user.avatar}
+                  alt={activeConv.user.name}
+                  className="w-10 h-10 rounded-full object-cover ring-2 ring-indigo-500/50 group-hover/chatuser:ring-rose-500/60 transition-all shadow-md"
+                />
+                {activeConv.user.isOnline && (
+                  <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full ring-2 ring-[#110D2A]" />
+                )}
               </div>
-              <p className="text-[11px] text-indigo-300/80 flex items-center gap-1 font-medium truncate">
-                <span className={activeConv.user.isOnline ? 'text-emerald-400 font-semibold' : 'text-gray-400'}>
-                  {activeConv.user.isOnline ? 'en ligne' : 'hors ligne'}
-                </span>
-              </p>
+
+              {/* Name, Verified Badge & Online Status */}
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h3 className="font-extrabold text-sm sm:text-base text-white truncate group-hover/chatuser:text-rose-200 transition-colors">{activeConv.user.name}</h3>
+                  {activeConv.user.isVerified && <VerifiedIcon size={14} className="shrink-0 text-amber-400" />}
+                </div>
+                <p className="text-[11px] text-indigo-300/80 flex items-center gap-1 font-medium truncate">
+                  <span className={activeConv.user.isOnline ? 'text-emerald-400 font-semibold' : 'text-gray-400'}>
+                    {activeConv.user.isOnline ? 'en ligne' : 'hors ligne'}
+                  </span>
+                </p>
+              </div>
             </div>
           </div>
 
@@ -1058,7 +1110,7 @@ export const MessagesView: React.FC<MessagesViewProps> = ({ onMobileChatToggle }
                   <img
                     src={activeConv.user.avatar}
                     alt={activeConv.user.name}
-                    className="w-7 h-7 rounded-xl object-cover ring-1 ring-white/10 shrink-0 mb-0.5 shadow-sm"
+                    className="w-7 h-7 rounded-full object-cover ring-1 ring-white/10 shrink-0 mb-0.5 shadow-sm"
                   />
                 )}
 

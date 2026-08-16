@@ -44,7 +44,10 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
   const [isCoverModalOpen, setIsCoverModalOpen] = useState<boolean>(false);
   const [activeSlideIndex, setActiveSlideIndex] = useState<number>(0);
   const [cropperTarget, setCropperTarget] = useState<{ src: string; type: 'avatar' | 'cover' } | null>(null);
+  const [lastRawPhoto, setLastRawPhoto] = useState<string | null>(null);
+  const [pendingAvatarPreview, setPendingAvatarPreview] = useState<string | null>(null);
   const [toastNotice, setToastNotice] = useState<string | null>(null);
+  const [userBio, setUserBio] = useState<string>('Auteur & Créateur passionné sur BenSo. Bienvenue dans mon univers de récits, contes et légendes ! ✨');
 
   // Default animated gradient themes for cover & avatar when no custom photo is chosen
   const defaultThemes = [
@@ -221,24 +224,15 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             )}
           </button>
 
-          {/* Camera Icon Button on Avatar (Direct Upload Input!) */}
-          <label
+          {/* Camera Icon Button on Avatar (Opens Avatar Viewer Modal) */}
+          <button
+            type="button"
+            onClick={() => setIsAvatarModalOpen(true)}
             className="absolute bottom-0 right-0 w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-600 to-rose-600 hover:from-indigo-500 hover:to-rose-500 text-white shadow-lg ring-2 ring-[#0A0718] transition-transform hover:scale-110 active:scale-95 flex items-center justify-center text-xs sm:text-sm cursor-pointer z-10"
-            title="Importer une nouvelle photo de profil"
+            title="Voir et modifier la photo de profil"
           >
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const url = URL.createObjectURL(e.target.files[0]);
-                  setCropperTarget({ src: url, type: 'avatar' });
-                }
-              }}
-              className="hidden"
-            />
             <span>📷</span>
-          </label>
+          </button>
 
         </div>
 
@@ -268,6 +262,29 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           </div>
         </div>
 
+      </div>
+
+      {/* Bio Section */}
+      <div className="pt-1">
+        <div className="p-3 rounded-2xl bg-white/[0.04] border border-indigo-900/40 backdrop-blur-sm flex items-start justify-between gap-2 shadow-sm">
+          <p className="text-xs sm:text-sm text-gray-200 font-medium leading-relaxed italic">
+            💬 {userBio}
+          </p>
+          <button
+            type="button"
+            onClick={() => {
+              const newBio = prompt('Modifier votre bio BenSo :', userBio);
+              if (newBio && newBio.trim()) {
+                setUserBio(newBio.trim());
+                showToast('✨ Bio mise à jour avec succès !');
+              }
+            }}
+            className="text-xs text-indigo-400 hover:text-white p-1 shrink-0 cursor-pointer"
+            title="Modifier la bio"
+          >
+            ✏️
+          </button>
+        </div>
       </div>
 
       {/* 3. Action Bar: Wallet Strip & Tableau de bord Button */}
@@ -306,25 +323,46 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
         
         {/* Publications Tab with Dropdown Filter Menu */}
         <div className="relative flex-1 sm:flex-none">
-          <button
-            type="button"
-            onClick={() => {
-              if (activeProfileTab !== 'my_stories') {
-                setActiveProfileTab('my_stories');
-              }
-              setIsFilterOpen(!isFilterOpen);
-            }}
-            className={`w-full sm:w-auto text-center px-5 py-2.5 rounded-2xl text-xs font-extrabold transition-all cursor-pointer flex items-center justify-center gap-2 ${
+          <div
+            className={`rounded-2xl text-xs font-extrabold transition-all flex items-center shadow-lg ${
               activeProfileTab === 'my_stories'
-                ? 'bg-gradient-to-r from-rose-500 to-indigo-600 text-white shadow-lg shadow-indigo-950/80 border border-rose-400/30'
+                ? 'bg-gradient-to-r from-rose-500 to-indigo-600 text-white shadow-indigo-950/80 border border-rose-400/30'
                 : 'bg-[#140F2D] hover:bg-[#1A143A] text-gray-300 hover:text-white border border-indigo-950/60'
             }`}
           >
-            <span>{getFilterLabel()}</span>
-            <span className={`text-[10px] transition-transform duration-200 ${isFilterOpen ? 'rotate-180' : ''}`}>
-              ▼
-            </span>
-          </button>
+            {/* Main Publications Button */}
+            <button
+              type="button"
+              onClick={() => {
+                setActiveProfileTab('my_stories');
+                setIsFilterOpen(false);
+              }}
+              className="px-4 py-2.5 hover:opacity-90 transition-opacity cursor-pointer font-extrabold"
+            >
+              {getFilterLabel()}
+            </button>
+
+            {/* Divider */}
+            <span className="w-px h-4 bg-white/20" />
+
+            {/* Small Arrow Trigger: ONLY clicking this opens/toggles the filter dropdown menu */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                if (activeProfileTab !== 'my_stories') {
+                  setActiveProfileTab('my_stories');
+                }
+                setIsFilterOpen(!isFilterOpen);
+              }}
+              className="px-2.5 py-2.5 hover:bg-white/10 rounded-r-2xl transition-colors cursor-pointer flex items-center justify-center text-[10px]"
+              title="Filtrer les publications par format"
+            >
+              <span className={`transition-transform duration-200 ${isFilterOpen ? 'rotate-180' : ''}`}>
+                ▼
+              </span>
+            </button>
+          </div>
 
           {/* Filter Dropdown Popover */}
           {isFilterOpen && (
@@ -346,10 +384,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                       : 'hover:bg-white/10 text-gray-300'
                   }`}
                 >
-                  <span className="flex items-center gap-2">
-                    <span>{opt.icon}</span>
-                    <span>{opt.label}</span>
-                  </span>
+                  <span>{opt.label}</span>
                   {filterType === opt.id && <span className="text-rose-400 font-extrabold text-xs">✓</span>}
                 </button>
               ))}
@@ -586,43 +621,58 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
       })()}
 
       {/* ================================================================= */}
-      {/* FULL-SCREEN AVATAR VIEWER & MANAGEMENT MODAL                    */}
+      {/* FULL-SCREEN AVATAR MODAL (WITH DUAL MODE: FULLSCREEN VS ROUND PREVIEW) */}
       {/* ================================================================= */}
       {isAvatarModalOpen && (
-        <div className="fixed inset-0 z-[100000] bg-[#0A0718]/95 backdrop-blur-xl flex flex-col justify-between animate-fadeIn text-white select-none p-4">
+        <div className="fixed inset-0 z-[100000] bg-[#0A0718]/95 backdrop-blur-2xl flex flex-col justify-between select-none animate-fadeIn">
           
-          {/* Top Controls Bar */}
-          <div className="flex items-center justify-between z-30 pt-2 sm:pt-4">
-            {/* Close Button */}
+          {/* Top Control Bar */}
+          <div className="p-4 flex items-center justify-between z-30 bg-gradient-to-b from-black/90 via-black/50 to-transparent">
+            {/* Close Modal Button (✕) */}
             <button
               type="button"
-              onClick={() => setIsAvatarModalOpen(false)}
-              className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center text-sm font-bold transition-all cursor-pointer shadow-md"
+              onClick={() => {
+                setPendingAvatarPreview(null);
+                setIsAvatarModalOpen(false);
+              }}
+              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white flex items-center justify-center text-sm font-bold transition-all cursor-pointer border border-white/15"
               title="Fermer"
             >
               ✕
             </button>
 
             {/* Slide Indicator Badge */}
-            <div className="px-3 py-0.5 rounded-full bg-white/10 border border-white/15 text-[11px] font-extrabold tracking-wider text-indigo-200 shadow-sm">
-              Photo de profil
+            <div className="px-3.5 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-extrabold tracking-wider text-indigo-200 shadow-sm flex items-center gap-1.5">
+              <span>{pendingAvatarPreview ? '✂️ Validation du recadrage' : 'Photo de profil'}</span>
             </div>
 
-            {/* Top Right Actions (Upload & Delete) */}
+            {/* Top Right Actions */}
             <div className="flex items-center gap-1.5">
-              {/* Delete profile photo button (if custom photo exists) */}
-              {avatarImage && (
+              {/* If pending preview: Cancel preview */}
+              {pendingAvatarPreview ? (
                 <button
                   type="button"
-                  onClick={() => {
-                    setAvatarImage(null);
-                    showToast('🗑️ Photo de profil réinitialisée !');
-                  }}
+                  onClick={() => setPendingAvatarPreview(null)}
                   className="w-8 h-8 rounded-full bg-rose-600/30 hover:bg-rose-600 text-rose-200 hover:text-white active:scale-95 flex items-center justify-center text-xs backdrop-blur-md border border-rose-500/40 transition-all cursor-pointer shadow-md"
-                  title="Supprimer la photo de profil"
+                  title="Annuler l'aperçu"
                 >
-                  🗑️
+                  ✕
                 </button>
+              ) : (
+                /* In normal view mode: Delete photo button (if custom photo exists) */
+                avatarImage && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setAvatarImage(null);
+                      showToast('🗑️ Photo de profil réinitialisée !');
+                    }}
+                    className="w-8 h-8 rounded-full bg-rose-600/30 hover:bg-rose-600 text-rose-200 hover:text-white active:scale-95 flex items-center justify-center text-xs backdrop-blur-md border border-rose-500/40 transition-all cursor-pointer shadow-md"
+                    title="Supprimer la photo de profil"
+                  >
+                    🗑️
+                  </button>
+                )
               )}
 
               {/* Upload new photo button */}
@@ -636,6 +686,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
                   onChange={(e) => {
                     if (e.target.files && e.target.files[0]) {
                       const url = URL.createObjectURL(e.target.files[0]);
+                      setLastRawPhoto(url);
                       setCropperTarget({ src: url, type: 'avatar' });
                     }
                   }}
@@ -646,83 +697,144 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
             </div>
           </div>
 
-          {/* Main Centered Avatar Preview (Dans le rond pour voir le rendu exact avant validation!) */}
-          <div className="flex-1 flex flex-col items-center justify-center my-auto p-4">
-            <div className="relative group">
-              {avatarImage ? (
+          {/* MAIN DISPLAY: DUAL MODE */}
+          {pendingAvatarPreview ? (
+            /* MODE B: PENDING ROUND AVATAR PREVIEW (Aperçu dans le rond lors d'un ajout/recadrage!) */
+            <div className="flex-1 flex flex-col items-center justify-center my-auto p-4 animate-fadeIn">
+              <div className="relative group">
                 <img
-                  src={avatarImage}
-                  alt="Ben HOUNSA Photo de profil"
+                  src={pendingAvatarPreview}
+                  alt="Aperçu recadrage photo de profil"
                   className="w-64 h-64 sm:w-80 sm:h-80 rounded-full object-cover shadow-2xl ring-4 ring-rose-500/40 border-4 border-white/20 animate-fadeIn"
                 />
+              </div>
+
+              <p className="mt-4 text-xs text-indigo-200/80 font-medium text-center max-w-xs">
+                Aperçu dans le rond de votre nouvelle photo de profil
+              </p>
+            </div>
+          ) : (
+            /* MODE A: NORMAL FULL-SCREEN AVATAR VIEWER (Affichage sur TOUT L'ÉCRAN comme la photo de couverture!) */
+            <div className="relative flex-1 w-full flex items-center justify-center overflow-hidden my-auto p-2 sm:p-4 animate-fadeIn">
+              {avatarImage ? (
+                <div className="w-full h-full max-h-[75vh] relative flex items-center justify-center bg-black/60 rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border border-white/10">
+                  <img
+                    src={avatarImage}
+                    alt="Ben HOUNSA Photo de profil"
+                    className="w-full h-full object-contain sm:object-cover animate-fadeIn"
+                  />
+                </div>
               ) : (
-                <div className={`w-64 h-64 sm:w-80 sm:h-80 rounded-full bg-gradient-to-tr ${activeTheme.avatar} flex flex-col items-center justify-center p-6 shadow-2xl ring-4 ring-rose-500/40 border-4 border-white/20 text-white animate-fadeIn`}>
-                  <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 shadow-inner mb-3">
-                    <svg className="w-14 h-14 sm:w-18 sm:h-18 text-white/90 drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-                    </svg>
+                <div className={`w-full h-full max-h-[75vh] bg-gradient-to-r ${activeTheme.cover} relative overflow-hidden flex flex-col items-center justify-center p-6 shadow-2xl rounded-2xl sm:rounded-3xl border border-white/10 text-white animate-fadeIn`}>
+                  <div className="absolute -top-20 -left-20 w-80 h-80 bg-rose-500/25 rounded-full blur-3xl animate-pulse" />
+                  <div className="absolute -bottom-20 -right-20 w-80 h-80 bg-indigo-500/30 rounded-full blur-3xl animate-bounce" />
+                  
+                  <div className="relative z-10 flex flex-col items-center justify-center text-center">
+                    <div className="w-24 h-24 sm:w-36 sm:h-36 rounded-full bg-white/10 flex items-center justify-center backdrop-blur-md border border-white/20 shadow-2xl mb-4 animate-pulse">
+                      <svg className="w-14 h-14 sm:w-20 sm:h-20 text-white/90 drop-shadow-xl" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-xl sm:text-3xl font-black italic tracking-wider uppercase text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-rose-200 drop-shadow-md">
+                      BEN HOUNSA
+                    </h2>
+                    <p className="text-xs sm:text-sm text-indigo-200/90 font-extrabold tracking-widest uppercase mt-1 italic">
+                      ✨ Avatar Par Défaut
+                    </p>
                   </div>
-                  <span className="text-xs font-black tracking-widest uppercase text-indigo-100">Avatar Par Défaut</span>
                 </div>
               )}
             </div>
+          )}
 
-            <p className="mt-4 text-xs text-indigo-200/80 font-medium text-center max-w-xs">
-              {avatarImage
-                ? 'Aperçu dans le rond de votre photo de profil'
-                : 'Aucune photo personnalisée définie. Vous utilisez l\'avatar par défaut.'}
-            </p>
-          </div>
+          {/* Bottom Action Bar */}
+          {pendingAvatarPreview ? (
+            /* Mode B Bottom Controls (Validation / Re-crop / Cancel) */
+            <div className="flex items-center justify-center gap-3 pb-6">
+              {/* Import another photo */}
+              <label
+                className="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white flex items-center justify-center text-base font-bold shadow-xl transition-all cursor-pointer border border-indigo-400/40"
+                title="Choisir une autre photo"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const url = URL.createObjectURL(e.target.files[0]);
+                      setLastRawPhoto(url);
+                      setCropperTarget({ src: url, type: 'avatar' });
+                    }
+                  }}
+                  className="hidden"
+                />
+                <span>📷</span>
+              </label>
 
-          {/* Bottom Action Bar (ICON-ONLY CONTROLS, NO TEXT WORDS!) */}
-          <div className="flex items-center justify-center gap-3 pb-6">
-            {/* Upload / Pick New Photo Icon Button */}
-            <label
-              className="w-10 h-10 rounded-full bg-indigo-600 hover:bg-indigo-500 active:scale-95 text-white flex items-center justify-center text-base font-bold shadow-xl transition-all cursor-pointer border border-indigo-400/40"
-              title="Importer une photo"
-            >
-              <input
-                type="file"
-                accept="image/*"
-                onChange={(e) => {
-                  if (e.target.files && e.target.files[0]) {
-                    const url = URL.createObjectURL(e.target.files[0]);
-                    setCropperTarget({ src: url, type: 'avatar' });
-                  }
-                }}
-                className="hidden"
-              />
-              <span>📷</span>
-            </label>
-
-            {/* Apply / Confirm Checkmark Icon Button */}
-            <button
-              type="button"
-              onClick={() => {
-                setIsAvatarModalOpen(false);
-                showToast('✅ Photo de profil validée !');
-              }}
-              className="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-white flex items-center justify-center text-base font-bold shadow-xl transition-all border border-emerald-300 cursor-pointer"
-              title="Valider"
-            >
-              ✓
-            </button>
-
-            {/* Delete / Reset Icon Button */}
-            {avatarImage && (
+              {/* Re-crop Button */}
               <button
                 type="button"
                 onClick={() => {
-                  setAvatarImage(null);
-                  showToast('🗑️ Photo de profil réinitialisée !');
+                  setCropperTarget({
+                    src: lastRawPhoto || pendingAvatarPreview,
+                    type: 'avatar',
+                  });
                 }}
+                className="w-10 h-10 rounded-full bg-amber-500 hover:bg-amber-400 active:scale-95 text-white flex items-center justify-center text-base font-bold shadow-xl transition-all border border-amber-300 cursor-pointer shadow-lg"
+                title="Modifier / Ajuster le recadrage"
+              >
+                ✂️
+              </button>
+
+              {/* Validate & Save Button */}
+              <button
+                type="button"
+                onClick={() => {
+                  setAvatarImage(pendingAvatarPreview);
+                  setPendingAvatarPreview(null);
+                  setIsAvatarModalOpen(false);
+                  showToast('✅ Photo de profil mise à jour avec succès !');
+                }}
+                className="w-10 h-10 rounded-full bg-emerald-500 hover:bg-emerald-400 active:scale-95 text-white flex items-center justify-center text-base font-bold shadow-xl transition-all border border-emerald-300 cursor-pointer"
+                title="Valider la photo de profil"
+              >
+                ✓
+              </button>
+
+              {/* Cancel Preview Button */}
+              <button
+                type="button"
+                onClick={() => setPendingAvatarPreview(null)}
                 className="w-10 h-10 rounded-full bg-rose-600/30 hover:bg-rose-600 text-rose-200 hover:text-white active:scale-95 flex items-center justify-center text-base font-bold shadow-xl transition-all border border-rose-500/40 cursor-pointer"
-                title="Supprimer la photo de profil"
+                title="Annuler l'aperçu"
               >
                 🗑️
               </button>
-            )}
-          </div>
+            </div>
+          ) : (
+            /* Mode A Bottom Controls (Clean View / Change photo) */
+            <div className="flex items-center justify-center gap-3 pb-6">
+              <label
+                className="px-4 py-2 rounded-full bg-white/10 hover:bg-white/20 active:scale-95 text-white border border-white/20 backdrop-blur-md shadow-xl flex items-center gap-2 transition-all cursor-pointer text-xs font-extrabold"
+                title="Changer la photo de profil"
+              >
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={(e) => {
+                    if (e.target.files && e.target.files[0]) {
+                      const url = URL.createObjectURL(e.target.files[0]);
+                      setLastRawPhoto(url);
+                      setCropperTarget({ src: url, type: 'avatar' });
+                    }
+                  }}
+                  className="hidden"
+                />
+                <span className="text-sm">📷</span>
+                <span>Modifier la photo</span>
+              </label>
+            </div>
+          )}
 
         </div>
       )}
@@ -737,7 +849,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
           title={cropperTarget.type === 'avatar' ? 'Recadrer la photo de profil' : 'Recadrer la couverture'}
           onCropComplete={(croppedUrl) => {
             if (cropperTarget.type === 'avatar') {
-              setAvatarImage(croppedUrl);
+              setPendingAvatarPreview(croppedUrl);
               setIsAvatarModalOpen(true);
               showToast('📸 Aperçu dans le rond ! Cliquez sur ✓ pour valider');
             } else {
@@ -745,7 +857,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({
               setCoverImage(croppedUrl);
               setActiveSlideIndex(0);
               setIsCoverModalOpen(true);
-              showToast('📷 Aperçu de la couverture ! Cliquez sur ✓ pour valider');
+              showToast('📷 Photo de couverture recadrée et appliquée !');
             }
             setCropperTarget(null);
           }}
